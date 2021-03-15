@@ -86,8 +86,10 @@
                 this.$store.dispatch('fetchScheduleInfo', this.$route.params.code);
             },
             editSchedule: function () {
-                this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_EDIT)
-                    .then(()=>this.$router.push(`/schedules/edit/` + this.schedule.code));
+                this.$store.dispatch('fetchEditScheduleData', this.schedule.code)
+                    .then(()=>{this.$router.push(`/schedules/edit/` + this.schedule.code);
+                        this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_EDIT)
+                    });
             },
             download: function () {
                 //TODO

@@ -12,85 +12,7 @@ Vue.use(Vuex);
 
 const currentYear = 2020, currentSeason = 2;
 
-let schedule_hardcoded = [
-    {
-        pair: 1,
-        courses: {
-            Mon: ["Понеділок 1 пара"],
-            Tue: ["Вівторок 1 пара"],
-            Wed: ["Середа 1 пара"],
-            Thu: ["Четвер 1 пара"],
-            Fri: ["П'ятниця 1 пара"],
-            Sat: ["Субота 1 пара"]
-        }
-    },
-    {
-        pair: 2,
-        courses: {
-            Mon: ["Понеділок 2 пара"],
-            Tue: ["Вівторок 2 пара"],
-            Wed: ["Середа 2 пара"],
-            Thu: ["Четвер 2 пара"],
-            Fri: ["П'ятниця 2 пара"],
-            Sat: ["Субота 2 пара"]
-        }
-    },
-    {
-        pair: 3,
-        courses: {
-            Mon: ["Понеділок 3 пара"],
-            Tue: ["Вівторок 3 пара"],
-            Wed: ["Середа 3 пара"],
-            Thu: ["Четвер 3 пара"],
-            Fri: ["П'ятниця 3 пара"],
-            Sat: ["Субота 3 пара"]
-        }
-    },
-    {
-        pair: 4,
-        courses: {
-            Mon: ["Понеділок 4 пара"],
-            Tue: ["Вівторок 4 пара"],
-            Wed: ["Середа 4 пара"],
-            Thu: ["Четвер 4 пара"],
-            Fri: ["П'ятниця 4 пара"],
-            Sat: ["Субота 4 пара"]
-        }
-    },
-    {
-        pair: 5,
-        courses: {
-            Mon: ["Понеділок 5 пара"],
-            Tue: ["Вівторок 5 пара"],
-            Wed: ["Середа 5 пара"],
-            Thu: ["Четвер 5 пара"],
-            Fri: ["П'ятниця 5 пара"],
-            Sat: ["Субота 5 пара"]
-        }
-    },
-    {
-        pair: 6,
-        courses: {
-            Mon: ["Понеділок 1 пара"],
-            Tue: ["Вівторок 1 пара"],
-            Wed: ["Середа 1 пара"],
-            Thu: ["Четвер 1 пара"],
-            Fri: ["П'ятниця 1 пара"],
-            Sat: ["Субота 1 пара"]
-        }
-    },
-    {
-        pair: 7,
-        courses: {
-            Mon: ["Понеділок 1 пара"],
-            Tue: ["Вівторок 1 пара"],
-            Wed: ["Середа 1 пара"],
-            Thu: ["Четвер 1 пара"],
-            Fri: ["П'ятниця 1 пара"],
-            Sat: ["Субота 1 пара"]
-        }
-    }
-];
+
 const methodist_hardcoded = {
     id: 79461,
     link: 1861,
@@ -128,7 +50,7 @@ const store = new Store({
                 academic_year: currentYear,
                 schedule_types: schedule_types
             },
-            emptySchedule: {
+            editableSchedule: {
                 selected_faculty: null,
                 selected_speciality: null,
                 selected_sub_faculty: null,
@@ -141,6 +63,7 @@ const store = new Store({
             },
             scheduleInfo: {},
             scheduleCourses: [],
+            editableCourses:[],
             finalSchedules: [],
             methodistSchedules: [],
             auth: true,
@@ -148,7 +71,7 @@ const store = new Store({
             role: Role.METHODIST,
             currentState: CurrentState.MAIN,
             breadcrumbs: breadcrumbs,
-            schedule: schedule_hardcoded,
+            schedule: [],
             loading: false
         },
         getters: {
@@ -165,11 +88,12 @@ const store = new Store({
             levels: state => state.university.levels,
             seasons: state => state.university.seasons,
             university: state => state.university,
-            emptySchedule: state => state.emptySchedule,
+            editableSchedule: state => state.editableSchedule,
             finalSchedules: state => state.finalSchedules,
             methodistSchedules: state => state.methodistSchedules,
             scheduleInfo: state => state.scheduleInfo,
             scheduleCourses: state => state.scheduleCourses,
+            editableCourses: state=>state.editableCourses,
             loading: state => state.loading
         },
         actions: {
@@ -328,7 +252,6 @@ const store = new Store({
                         commit("setLoading", false));
             },
             selectNewScheduleCourses({commit}, data) {
-                console.log("store");
                 commit("setLoading", true);
                 axios.get('/api/courses', {
                     params: data
@@ -354,6 +277,9 @@ const store = new Store({
                         .finally(() =>
                             commit("setLoading", false));
                 }
+            },
+            setCreateScheduleData({commit}){
+              commit("setCreateScheduleData");
             },
             editSchedule({commit}, code) {
                 axios
@@ -397,7 +323,7 @@ const store = new Store({
                 state.currentState = currentState;
             },
             setCreateType(state, createType) {
-                state.emptySchedule.schedule_type = createType;
+                state.editableSchedule.schedule_type = createType;
             },
             setFinalSchedules(state, data) {
                 state.finalSchedules = [];
@@ -410,17 +336,51 @@ const store = new Store({
             },
             setScheduleInfo(state, data) {
                 state.scheduleInfo = data;
+                console.log("schedule info");
                 console.log(state.scheduleInfo);
             },
             setScheduleCourses(state, data) {
                 state.scheduleCourses = data;
-                console.log("schedule courses"+state.scheduleCourses);
+                console.log("schedule courses");
+                console.log(state.scheduleCourses);
             },
             setLoading(state, load) {
                 state.loading = load;
             },
+            setCreateScheduleData(state){
+                state.editableSchedule={
+                    selected_faculty: state.user.methodist.faculty_id,
+                        selected_speciality: null,
+                        selected_sub_faculty: null,
+                        selected_level: 1,
+                        selected_study_year: 1,
+                        selected_season: 1,
+                        selected_academic_year: state.university.current_year,
+                        notes: "",
+                        schedule_type: ScheduleType.IDLE
+                };
+                state.editableCourses=[];
+            },
             setCurrentScheduleInfoEditable(state) {
-                state.emptySchedule = {
+                console.log("I`m here");
+                state.editableSchedule = {
+                    selected_faculty: state.scheduleInfo.faculty_id,
+                    selected_speciality: state.scheduleInfo.speciality_id,
+                    selected_sub_faculty: state.scheduleInfo.subfaculty_id,
+                    selected_level: state.scheduleInfo.level,
+                    selected_study_year: state.scheduleInfo.study_year,
+                    selected_season: state.scheduleInfo.season,
+                    selected_academic_year: state.scheduleInfo.academic_year,
+                    notes: "",
+                    schedule_type: state.scheduleInfo.schedule_type,
+                    schedule_code: state.scheduleInfo.code
+                };
+                state.editableCourses=state.scheduleCourses;
+            },
+            setScheduleInfoEditable(state, data) {
+                state.scheduleInfo = data.schedule;
+                state.scheduleCourses = data.courses;
+                state.editableSchedule = {
                     selected_faculty: state.scheduleInfo.faculty_id,
                     selected_speciality: state.scheduleInfo.speciality_id,
                     selected_sub_faculty: state.scheduleInfo.subfaculty_id,
@@ -431,10 +391,7 @@ const store = new Store({
                     notes: "",
                     schedule_type: state.scheduleInfo.schedule_type
                 };
-            },
-            setScheduleInfoEditable(state, data) {
-                console.log(state.user + data);
-                console.log("SET SCHEDULE INFO EDITABLE!!!!!!");
+                state.editableCourses=data.courses;
             },
             setUserData(state, data) {
                 state.user.courses = data.course_data;

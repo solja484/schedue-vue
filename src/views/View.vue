@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-if="!loading">
         <Header></Header>
         <Breadcrumbs type="VIEW"></Breadcrumbs>
-        <ScheduleInfo ></ScheduleInfo>
+        <ScheduleInfo></ScheduleInfo>
         <Footer></Footer>
     </div>
 </template>
@@ -12,10 +12,19 @@
     import Breadcrumbs from "../components/Basic/Breadcrumbs";
     import ScheduleInfo from "../components/Basic/ScheduleInfo";
     import Footer from "../components/Basic/Footer";
+    import {CurrentState} from "../models/entities/CurrentState";
 
     export default {
         name: "ViewPage",
-        components: {Footer, ScheduleInfo, Breadcrumbs, Header}
+        components: {Footer, ScheduleInfo, Breadcrumbs, Header},
+        computed: {
+            loading: function () {
+                return this.$store.getters['loading'];
+            }
+        },
+        mounted() {
+            this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_VIEW);
+        }
     };
 </script>
 

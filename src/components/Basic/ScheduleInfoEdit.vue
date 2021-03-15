@@ -77,12 +77,11 @@
             </div>
         </div>
         <div class="px-5 mt-3" v-if="!loading">
-            <EmptyTable v-if="currentState==createState" :schedule_type="schedule_type"
-                        :currentState="currentState"
-                        :disabled="selected_speciality==null&&selected_sub_faculty==null"></EmptyTable>
-            <EditableTable v-if="currentState==editState" :schedule_type="schedule_type"
+            <EmptyRow></EmptyRow>
+            <ViewTable  :schedule_type="schedule_type"
+                        :code="schedule_code"
                            :currentState="currentState"
-                           :disabled="selected_speciality==null&&selected_sub_faculty==null"></EditableTable>
+                           :disable="selected_speciality==null&&selected_sub_faculty==null"></ViewTable>
         </div>
     </div>
 </template>
@@ -92,15 +91,15 @@
     import {CurrentState} from "../../models/entities/CurrentState";
     import {ScheduleType} from "../../models/entities/ScheduleType"
     import {BFormSelect, BFormSelectOption, BFormGroup, BFormRadioGroup, BFormInput} from "bootstrap-vue";
-    import EmptyTable from "../Table/EmptyTable";
-    import EditableTable from "../Table/EditableTable";
+    import ViewTable from "../Table/ViewTable";
+    import EmptyRow from "../Table/EmptyRow";
 
     export default {
         name: "ScheduleInfoEdit",
         components: {
-            EmptyTable,
+            EmptyRow,
+            ViewTable,
             Title,
-            EditableTable,
             BFormSelect,
             BFormSelectOption,
             BFormGroup,
@@ -122,14 +121,15 @@
                 ],
                 yearsByLevel: this.$store.getters['university'].levels.filter(l => l.level == 1),
                 selected_faculty: this.$store.getters['user'].methodist.faculty_id,
-                selected_speciality: this.$store.getters['emptySchedule'].selected_speciality,
-                selected_sub_faculty: this.$store.getters['emptySchedule'].selected_sub_faculty,
-                selected_study_year: this.$store.getters['emptySchedule'].selected_study_year,
-                selected_season: this.$store.getters['emptySchedule'].selected_season,
-                selected_academic_year: this.$store.getters['emptySchedule'].selected_academic_year,
-                notes: this.$store.getters['emptySchedule'].notes,
-                selected_level: this.$store.getters['emptySchedule'].selected_level,
-                schedule_type: this.$store.getters['emptySchedule'].schedule_type,
+                selected_speciality: this.$store.getters['editableSchedule'].selected_speciality,
+                selected_sub_faculty: this.$store.getters['editableSchedule'].selected_sub_faculty,
+                selected_study_year: this.$store.getters['editableSchedule'].selected_study_year,
+                selected_season: this.$store.getters['editableSchedule'].selected_season,
+                selected_academic_year: this.$store.getters['editableSchedule'].selected_academic_year,
+                notes: this.$store.getters['editableSchedule'].notes,
+                selected_level: this.$store.getters['editableSchedule'].selected_level,
+                schedule_type: this.$store.getters['editableSchedule'].schedule_type,
+                schedule_code: this.$store.getters['editableSchedule'].schedule_code,
                 sub_faculty_type: ScheduleType.SUBFACULTY
             }
         },

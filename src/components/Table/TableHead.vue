@@ -1,9 +1,10 @@
 <template>
-        <thead>
+        <thead v-if="!loading">
         <tr class="text-center table-header">
-            <th style="width: 2%;">День</th>
+            <th style="width: 2%!important;">День</th>
             <th style="width: 7%;">Час</th>
-            <th style="width: 3%;" v-if="currentState==createState"></th>
+            <th style="width: 3%;" v-if="currentState==createState||currentState==editState"></th>
+            <th style="width: 6%;" v-if="currentState==createState||currentState==editState">Код</th>
             <th style="width: 40%;">Дисципліна</th>
             <th>Викладач</th>
             <th style="width: 10%;" v-if="schedule_type==session_type">Вид контролю</th>
@@ -29,7 +30,12 @@ import {CurrentState} from "../../models/entities/CurrentState";
                 createState:CurrentState.SCHEDULE_CREATE,
                 editState:CurrentState.SCHEDULE_EDIT
             }
-        }
+        },
+        computed: {
+            loading: function () {
+                return this.$store.getters['loading'];
+            }
+        },
 
     }
 </script>

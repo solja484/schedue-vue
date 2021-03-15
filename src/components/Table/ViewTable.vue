@@ -1,25 +1,24 @@
 <template>
-    <table class="table table-bordered table-hover table-align">
+    <table class="table table-bordered table-align" :class="{'table-hover':!disable}" id="schedule">
         <TableHead :schedule_type="schedule_type"></TableHead>
-        <TableDay v-for="day in days" :key="day.number" :day="day" :schedule_type="schedule_type"></TableDay>
+        <TableDay v-for="day in days" :key="day.number" :day="day" :schedule_type="schedule_type" :disable="disable"></TableDay>
     </table>
 </template>
 
 <script>
     import TableHead from "./TableHead";
     import TableDay from "./TableDay";
-    import {ScheduleType} from "../../models/entities/ScheduleType";
 
     export default {
         name: "ViewTable",
         components: {TableHead, TableDay},
-        props: ["schedule_type", "code"],
+        props: ["schedule_type", "code", "currentState", "disable"],
         data() {
             return {
-                days: this.$store.getters['days'],
-                session_type: ScheduleType.SESSION
+                days: this.$store.getters['days']
             }
-        }
+        },
+
     }
 </script>
 
