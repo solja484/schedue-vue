@@ -47,7 +47,7 @@
         components: {ViewTable, Title},
         data() {
             return {
-                seasons: this.$store.getters['seasons'],
+                seasons: this.$store.getters['university/seasons'],
                 user: this.$store.getters['user'],
                 userRole: this.$store.getters['userRole'],
                 methodist: Role.METHODIST
@@ -79,7 +79,7 @@
             this.fetchScheduleInfo();
         },
         watch: {
-            '$route': 'fetchScheduleInfo'
+       '$route': 'fetchScheduleInfo'
         },
         methods: {
             fetchScheduleInfo() {
@@ -93,7 +93,7 @@
             },
             download: function () {
                 //TODO
-                console.log("trying to download table");
+                console.log("trying to download a table");
             }
         }
     }

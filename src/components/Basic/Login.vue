@@ -1,7 +1,7 @@
 <template>
     <div class="blue">
-        <b-card class=" border-sharp">
-            <b-form class="container-fluid ">
+        <b-card class="border-sharp">
+            <b-form class="container-fluid">
                 <b-form-group label="Логін:" label-for="login-email">
                     <b-form-input
                             v-model="form.login"
@@ -11,7 +11,6 @@
                             required
                     ></b-form-input>
                 </b-form-group>
-
                 <b-form-group label="Пароль:" label-for="login-password">
                     <b-form-input
                             v-model="form.password"
@@ -20,7 +19,6 @@
                             required
                     ></b-form-input>
                 </b-form-group>
-
                 <b-button class="px-5" @click="loginF">Вхід</b-button>
             </b-form>
         </b-card>

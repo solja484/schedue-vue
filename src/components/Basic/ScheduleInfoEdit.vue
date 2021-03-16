@@ -108,15 +108,14 @@
             return {
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
-                university: this.$store.getters['university'],
+                academic_year: this.$store.getters['university/academic_year'],
                 methodist: this.$store.getters['user'].methodist,
+                sub_faculty_all:this.$store.getters['university/sub_faculty'],
+                speciality_all:this.$store.getters['university/speciality'],
+                faculty_all:this.$store.getters['university/faculties'],
                 sub_faculty: [],
                 speciality: [],
-                level_options: [
-                    {text: 'Бакалаврська', value: 1},
-                    {text: 'Магістерська', value: 2}
-                ],
-                yearsByLevel: this.$store.getters['university'].levels.filter(l => l.level == 1),
+                yearsByLevel: this.$store.getters['university/levels'].filter(l => l.level == 1),
                 selected_faculty: this.$store.getters['user'].methodist.faculty_id,
                 selected_speciality: this.$store.getters['editableSchedule'].selected_speciality,
                 selected_sub_faculty: this.$store.getters['editableSchedule'].selected_sub_faculty,
@@ -127,22 +126,26 @@
                 selected_level: this.$store.getters['editableSchedule'].selected_level,
                 schedule_type: this.$store.getters['editableSchedule'].schedule_type,
                 schedule_code: this.$store.getters['editableSchedule'].schedule_code,
-                sub_faculty_type: ScheduleType.SUBFACULTY
+                sub_faculty_type: ScheduleType.SUBFACULTY,
+                level_options: [
+                    {text: 'Бакалаврська', value: 1},
+                    {text: 'Магістерська', value: 2}
+                ]
             }
         },
         computed: {
             next_academic_year: function () {
-                return this.university.academic_year + 1
+                return this.academic_year + 1
             },
             subfacultyFiltered: function () {
                 if (this.schedule_type == this.sub_faculty_type)
-                    return this.university.sub_faculty.filter(s =>
+                    return this.sub_faculty_all.filter(s =>
                         (s.faculty_id == this.selected_faculty));
                 return [];
             },
             specialityFiltered: function () {
                 if (this.schedule_type != this.sub_faculty_type)
-                    return this.university.speciality.filter(s =>
+                    return this.speciality_all.filter(s =>
                         (s.faculty_id == this.selected_faculty && s.level == this.selected_level));
                 return [];
             },
@@ -153,7 +156,7 @@
         watch: {
             selected_level: function () {
                 this.specialityFiltered;
-                this.yearsByLevel = this.$store.getters['levels'].filter(l => l.level == this.selected_level);
+                this.yearsByLevel = this.$store.getters['university/levels'].filter(l => l.level == this.selected_level);
                 this.selected_speciality = null;
                 this.selected_sub_faculty = null;
             },
@@ -188,7 +191,17 @@
                     "season": this.selected_season
                 };
                 this.$store.dispatch('selectNewScheduleCourses', data);
-            }
+            },
+            selected_season: function () {
+                console.log("watcher");
+                let data = {
+                    "faculty": this.methodist.faculty_id,
+                    "level": this.selected_level,
+                    "academic_year": this.selected_academic_year,
+                    "season": this.selected_season
+                };
+                this.$store.dispatch('selectNewScheduleCourses', data);
+            },
         },
         methods: {
             saveSchedule: function () {

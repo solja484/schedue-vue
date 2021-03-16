@@ -15,7 +15,7 @@
         props: ["schedule_type", "code", "currentState", "disable"],
         data() {
             return {
-                days: this.$store.getters['days']
+                days: this.$store.getters['university/days']
             }
         },
 

@@ -11,7 +11,7 @@
                           v-model="course_code" :disabled="disable">
             </b-form-input-->
             <autocomplete
-                    :default-value="course_code +' '+course_name"
+                    :default-value="currentState==editState ? course_code +' '+course_name :''"
                     :search="search"
                     :get-result-value="getResultValue"
                     @submit="onSubmit" :disabled="disable">
@@ -90,6 +90,7 @@
         props: ['row', 'schedule_type', 'disable'],
         data() {
             return {
+                currentState:this.store.getters['currentState'],
                 course_name: this.row.name,
                 course_code: this.row.course_code,
                 course_teacher: this.row.teacher,
@@ -108,7 +109,7 @@
             },
             default_value:function(){
                 if(this.row) {return this.row.course_code + ' ' +this.row.name;}
-                return "";
+                return false;
             }
         },
         methods: {

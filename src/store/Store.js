@@ -5,14 +5,11 @@ import {CurrentState} from "../models/entities/CurrentState";
 import {ScheduleType} from "../models/entities/ScheduleType"
 import {Role} from "../models/entities/Role";
 import {breadcrumbs} from "../assets/api/breadcrumbs";
-import {levels, seasons} from "../assets/api/levels";
-import {schedule_types} from "../assets/api/schedule_types";
+import universityModule from "./university.module";
 
 Vue.use(Vuex);
 
-const currentYear = 2020, currentSeason = 2;
-
-
+const currentYear = 2020, currentSeason=2;
 const methodist_hardcoded = {
     id: 79461,
     link: 1861,
@@ -36,20 +33,11 @@ const methodist_hardcoded = {
 };*/
 const store = new Store({
 
+    //TODO store.dispatch('university/fetchFaculties');
+        modules: {
+            university:universityModule
+        },
         state: {
-            university: {
-                current_year: currentYear,
-                current_season: currentSeason,
-                faculties: [],
-                speciality: [],
-                sub_faculty: [],
-                days: [],
-                pairs: [],
-                levels: levels,
-                seasons: seasons,
-                academic_year: currentYear,
-                schedule_types: schedule_types
-            },
             editableSchedule: {
                 selected_faculty: null,
                 selected_speciality: null,
@@ -63,7 +51,7 @@ const store = new Store({
             },
             scheduleInfo: {},
             scheduleCourses: [],
-            editableCourses:[],
+            editableCourses: [],
             finalSchedules: [],
             methodistSchedules: [],
             auth: true,
@@ -79,21 +67,15 @@ const store = new Store({
             currentState: state => state.currentState,
             user: state => state.user,
             breadcrumbs: state => state.breadcrumbs,
-            days: state => state.university.days,
-            pairs: state => state.university.pairs,
-            schedule: state => state.schedule,
-            faculties: state => state.university.faculties,
-            sub_faculty: state => state.university.sub_faculty,
-            speciality: state => state.university.speciality,
-            levels: state => state.university.levels,
-            seasons: state => state.university.seasons,
-            university: state => state.university,
-            editableSchedule: state => state.editableSchedule,
+
             finalSchedules: state => state.finalSchedules,
             methodistSchedules: state => state.methodistSchedules,
+
+            editableSchedule: state => state.editableSchedule,
             scheduleInfo: state => state.scheduleInfo,
             scheduleCourses: state => state.scheduleCourses,
-            editableCourses: state=>state.editableCourses,
+            editableCourses: state => state.editableCourses,
+
             loading: state => state.loading
         },
         actions: {
@@ -127,69 +109,6 @@ const store = new Store({
                         commit("setLoading", false));
 
             },
-            fetchFaculties({state, commit}) {
-                if (state.university.faculties.length == 0) {
-                    commit("setLoading", true);
-                    axios
-                        .get(`/api/faculty`)
-                        .then(res => {
-                            commit("setFaculties", res.data);
-                        })
-                        .catch(error => console.log(error))
-                        .finally(() =>
-                            commit("setLoading", false));
-                }
-            },
-            fetchSubFaculties({state, commit}) {
-                if (state.university.sub_faculty.length == 0) {
-                    commit("setLoading", true);
-                    axios
-                        .get(`/api/sub_faculty`)
-                        .then(res => {
-                            commit("setSubFaculties", res.data);
-                        })
-                        .catch(error => console.log(error))
-                        .finally(() =>
-                            commit("setLoading", false));
-                }
-            },
-            fetchSpeciality({state, commit}) {
-                if (state.university.speciality.length == 0) {
-                    commit("setLoading", true);
-                    axios
-                        .get(`/api/speciality`)
-                        .then(res => {
-                            commit("setSpeciality", res.data);
-                        })
-                        .catch(error => console.log(error))
-                        .finally(() =>
-                            commit("setLoading", false));
-                }
-            },
-            fetchDays({state, commit}) {
-                if (state.university.days.length == 0) {
-                    commit("setLoading", true);
-                    axios
-                        .get(`/api/days`)
-                        .then(res =>
-                            commit("setDays", res.data))
-                        .catch(error => console.log(error))
-                        .finally(() =>
-                            commit("setLoading", false));
-                }
-            },
-            fetchPairs({state, commit}) {
-                if (state.university.pairs.length == 0) {
-                    commit("setLoading", true);
-                    axios
-                        .get(`/api/pairs`)
-                        .then(res =>
-                            commit("setPairs", res.data))
-                        .catch(error => console.log(error))
-                        .finally(() =>
-                            commit("setLoading", false));
-                }
-            },
             fetchUserCourses({state, commit}) {
                 commit("setLoading", true);
                 axios
@@ -201,13 +120,13 @@ const store = new Store({
                     .finally(() =>
                         commit("setLoading", false));
             },
-            fetchFinalSchedules({state, commit}) {
+            fetchFinalSchedules({commit}) {
                 commit("setLoading", true);
                 axios
                     .get(`/api/schedules`, {
                         params: {
-                            year: state.university.current_year,
-                            season: state.university.current_season
+                            year: currentYear,
+                            season:currentSeason
                         }
                     })
                     .then(res => {
@@ -225,8 +144,8 @@ const store = new Store({
                     axios
                         .get(`/api/methodist/schedules`, {
                             params: {
-                                year: state.university.current_year,
-                                season: state.university.current_season,
+                                year: currentYear,
+                                season:currentSeason,
                                 faculty_id: state.user.methodist.faculty_id
                             }
                         })
@@ -242,7 +161,7 @@ const store = new Store({
                 commit("setLoading", true);
                 axios
                     .get(`/api/schedule/` + code)
-                    .then(res =>{
+                    .then(res => {
                         commit("setScheduleInfo", res.data.schedule);
                         commit("setScheduleCourses", res.data.courses);
                     })
@@ -278,8 +197,8 @@ const store = new Store({
                             commit("setLoading", false));
                 }
             },
-            setCreateScheduleData({commit}){
-              commit("setCreateScheduleData");
+            setCreateScheduleData({commit}) {
+                commit("setCreateScheduleData");
             },
             editSchedule({commit}, code) {
                 axios
@@ -299,26 +218,6 @@ const store = new Store({
             }
         },
         mutations: {
-            setFaculties(state, data) {
-                state.university.faculties = [];
-                data.forEach(d => state.university.faculties.push(d));
-            },
-            setSubFaculties(state, data) {
-                state.university.sub_faculty = [];
-                data.forEach(d => state.university.sub_faculty.push(d));
-            },
-            setSpeciality(state, data) {
-                state.university.speciality = [];
-                data.forEach(d => state.university.speciality.push(d));
-            },
-            setDays(state, data) {
-                state.university.days = [];
-                data.forEach(d => state.university.days.push(d));
-            },
-            setPairs(state, data) {
-                state.university.pairs = [];
-                data.forEach(d => state.university.pairs.push(d));
-            },
             setCurrentState(state, currentState) {
                 state.currentState = currentState;
             },
@@ -347,19 +246,19 @@ const store = new Store({
             setLoading(state, load) {
                 state.loading = load;
             },
-            setCreateScheduleData(state){
-                state.editableSchedule={
+            setCreateScheduleData(state) {
+                state.editableSchedule = {
                     selected_faculty: state.user.methodist.faculty_id,
-                        selected_speciality: null,
-                        selected_sub_faculty: null,
-                        selected_level: 1,
-                        selected_study_year: 1,
-                        selected_season: 1,
-                        selected_academic_year: state.university.current_year,
-                        notes: "",
-                        schedule_type: ScheduleType.IDLE
+                    selected_speciality: null,
+                    selected_sub_faculty: null,
+                    selected_level: 1,
+                    selected_study_year: 1,
+                    selected_season: 1,
+                    selected_academic_year: state.university.current_year,
+                    notes: "",
+                    schedule_type: ScheduleType.IDLE
                 };
-                state.editableCourses=[];
+                state.editableCourses = [];
             },
             setCurrentScheduleInfoEditable(state) {
                 console.log("I`m here");
@@ -375,7 +274,7 @@ const store = new Store({
                     schedule_type: state.scheduleInfo.schedule_type,
                     schedule_code: state.scheduleInfo.code
                 };
-                state.editableCourses=state.scheduleCourses;
+                state.editableCourses = state.scheduleCourses;
             },
             setScheduleInfoEditable(state, data) {
                 state.scheduleInfo = data.schedule;
@@ -391,7 +290,7 @@ const store = new Store({
                     notes: "",
                     schedule_type: state.scheduleInfo.schedule_type
                 };
-                state.editableCourses=data.courses;
+                state.editableCourses = data.courses;
             },
             setUserData(state, data) {
                 state.user.courses = data.course_data;

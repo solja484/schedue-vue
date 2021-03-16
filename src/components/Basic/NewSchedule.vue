@@ -45,7 +45,7 @@
         components: {Title, BFormSelect, BFormSelectOption},
         data() {
             return {
-                schedule_types: this.$store.getters['university'].schedule_types,
+                schedule_types: this.$store.getters['university/schedule_types'],
                 selected: null,
                 code: null
             };

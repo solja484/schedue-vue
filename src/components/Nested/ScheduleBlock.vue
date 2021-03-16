@@ -53,10 +53,10 @@
         components: {ScheduleList, BCollapse},
         data() {
             return {
-                faculties: this.$store.getters["faculties"],
-                sub_faculty: this.$store.getters["sub_faculty"],
-                speciality: this.$store.getters["speciality"],
-                levels: this.$store.getters["levels"]
+                faculties: this.$store.getters["university/faculties"],
+                sub_faculty: this.$store.getters["university/sub_faculty"],
+                speciality: this.$store.getters["university/speciality"],
+                levels: this.$store.getters["university/levels"]
             };
         },
         props: ["type"]

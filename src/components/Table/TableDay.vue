@@ -33,7 +33,7 @@
         props: ["day", "schedule_type", 'disable'],
         data() {
             return {
-                pairs: this.$store.getters['pairs'],
+                pairs: this.$store.getters['university/pairs'],
                 session_type: ScheduleType.SESSION,
                 currentState: this.$store.getters['currentState'],
                 viewState: CurrentState.SCHEDULE_VIEW,
