@@ -11,8 +11,8 @@
                         class="mb-3"
                         variant="secondary">
                     <template #first>
-                        <b-form-select-option :value="null" disabled
-                        >Не обрано
+                        <b-form-select-option :value="null" disabled>
+                            Не обрано
                         </b-form-select-option>
                     </template>
                     <b-form-select-option

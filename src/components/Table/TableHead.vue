@@ -4,7 +4,6 @@
             <th style="width: 2%!important;">День</th>
             <th style="width: 7%;">Час</th>
             <th style="width: 3%;" v-if="currentState==createState||currentState==editState"></th>
-            <th style="width: 6%;" v-if="currentState==createState||currentState==editState">Код</th>
             <th style="width: 40%;">Дисципліна</th>
             <th>Викладач</th>
             <th style="width: 10%;" v-if="schedule_type==session_type">Вид контролю</th>

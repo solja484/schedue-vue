@@ -70,6 +70,7 @@
                     if (counter == 0) {
                         let empty = {
                             "id": i,
+                            "name":"",
                             "course_code": "",
                             "group": 100,
                             "pair_id": i,

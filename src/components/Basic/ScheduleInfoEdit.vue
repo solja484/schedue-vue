@@ -77,7 +77,6 @@
             </div>
         </div>
         <div class="px-5 mt-3" v-if="!loading">
-            <EmptyRow></EmptyRow>
             <ViewTable  :schedule_type="schedule_type"
                         :code="schedule_code"
                            :currentState="currentState"
@@ -92,12 +91,10 @@
     import {ScheduleType} from "../../models/entities/ScheduleType"
     import {BFormSelect, BFormSelectOption, BFormGroup, BFormRadioGroup, BFormInput} from "bootstrap-vue";
     import ViewTable from "../Table/ViewTable";
-    import EmptyRow from "../Table/EmptyRow";
 
     export default {
         name: "ScheduleInfoEdit",
         components: {
-            EmptyRow,
             ViewTable,
             Title,
             BFormSelect,
@@ -195,7 +192,6 @@
         },
         methods: {
             saveSchedule: function () {
-                console.log("CREATE TYPE" + this.schedule_type);
                 const data = {
                     "selected_faculty": this.selected_faculty,
                     "selected_speciality": this.selected_speciality,
@@ -214,8 +210,10 @@
             }
         },
         mounted() {
-            if (!this.$store.getters['user'].methodist)
-                this.$router.push('/schedule/view/' + this.$route.params.code);
+            if (!this.$store.getters['user'].methodist&&this.currentState==this.editState)
+                this.$router.push('/schedules/view/' + this.$route.params.code);
+            if(this.$store.getters['currentState']!=this.currentState)
+                this.$router.push('/schedules/view/' + this.$route.params.code);
         }
     }
 </script>

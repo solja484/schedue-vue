@@ -19,11 +19,9 @@
     components: {ScheduleInfoEdit, Footer, Breadcrumbs, Header},
     data(){
       return{
-        edit:CurrentState.SCHEDULE_EDIT
+        edit:CurrentState.SCHEDULE_EDIT,
+        currentState:this.store.getters['currentState']
       }
-    },
-    mounted(){
-      this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_EDIT);
     }
   };
 </script>
