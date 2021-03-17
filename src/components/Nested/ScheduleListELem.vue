@@ -16,12 +16,10 @@
     export default {
         name: "ScheduleListELem",
         props: ["code", "title"],
-        methods:{
-            viewSchedule:function(){
-                this.$store.dispatch('fetchScheduleInfo',this.code).then(()=>{
-                    this.$store.dispatch('changeCurrentState',CurrentState.SCHEDULE_VIEW);
-                    this.$router.push('/schedules/view/'+this.code);
-                })
+        methods: {
+            viewSchedule: function () {
+                this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_VIEW)
+                    .then(() => this.$router.push('/schedules/view/' + this.code));
             }
         }
     };

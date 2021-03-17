@@ -53,10 +53,10 @@
         methods: {
             createNewSchedule: function () {
                 this.$store
-                    .dispatch("changeCurrentState", CurrentState.SCHEDULE_CREATE)
+                    .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_CREATE)
                     .then(() =>
-                        this.$store.dispatch("setCreateScheduleData").then(() =>
-                            this.$store.dispatch("setCreateType", this.selected).then(() =>
+                        this.$store.dispatch("schedule/setCreateScheduleData").then(() =>
+                            this.$store.dispatch("schedule/setCreateType", this.selected).then(() =>
                                 this.$router.push("/schedules/create"))))
                     .catch(err => console.log(err));
             }

@@ -48,8 +48,8 @@
         data() {
             return {
                 seasons: this.$store.getters['university/seasons'],
-                user: this.$store.getters['user'],
-                userRole: this.$store.getters['userRole'],
+                user: this.$store.getters['state/user'],
+                userRole: this.$store.getters['state/userRole'],
                 methodist: Role.METHODIST
             }
         },
@@ -66,34 +66,29 @@
                 else return (this.schedule.study_year - 4)
             },
             schedule: function () {
-                return this.$store.getters['scheduleInfo'];
+                return this.$store.getters['schedule/viewInfo'];
             },
             courses: function () {
-                return this.$store.getters['scheduleCourses'];
+                return this.$store.getters['schedule/viewRows'];
             },
             loading: function () {
                 return this.$store.getters['loading'];
             }
         },
         mounted() {
-            this.fetchScheduleInfo();
-        },
-        watch: {
-       '$route': 'fetchScheduleInfo'
+            this.$store.dispatch('schedule/fetchScheduleData', this.$route.params.code);
         },
         methods: {
-            fetchScheduleInfo() {
-                this.$store.dispatch('fetchScheduleInfo', this.$route.params.code);
-            },
             editSchedule: function () {
-                this.$store.dispatch('fetchEditScheduleData', this.schedule.code)
-                    .then(()=>{this.$router.push(`/schedules/edit/` + this.schedule.code);
-                        this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_EDIT)
+                this.$store.dispatch('schedule/setEditScheduleData')
+                    .then(()=>{
+                this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_EDIT);
+                        this.$router.push(`/schedules/edit/` + this.schedule.code);
                     });
             },
             download: function () {
                 //TODO
-                console.log("trying to download a table");
+                alert("trying to download a table");
             }
         }
     }

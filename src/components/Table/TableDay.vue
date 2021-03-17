@@ -35,7 +35,7 @@
             return {
                 pairs: this.$store.getters['university/pairs'],
                 session_type: ScheduleType.SESSION,
-                currentState: this.$store.getters['currentState'],
+                currentState: this.$store.getters['state/currentState'],
                 viewState: CurrentState.SCHEDULE_VIEW,
                 editState: CurrentState.SCHEDULE_EDIT
             }
@@ -43,9 +43,9 @@
         computed: {
             courses: function () {
                 if (this.currentState == CurrentState.SCHEDULE_VIEW)
-                    return this.$store.getters['scheduleCourses'].filter(c => c.day_id == this.day.id);
+                    return this.$store.getters['schedule/viewRows'].filter(c => c.day_id == this.day.id);
                 else
-                    return this.$store.getters['editableCourses'].filter(c => c.day_id == this.day.id);
+                    return this.$store.getters['schedule/editRows'].filter(c => c.day_id == this.day.id);
             },
             rowspan_all: function () {
                 let result = 3;

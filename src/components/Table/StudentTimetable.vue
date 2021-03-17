@@ -33,9 +33,9 @@ export default {
   components: { TimetableCell, CourseDetails },
   data() {
     return {
-      days: this.$store.getters["days"],
-      pairs: this.$store.getters["pairs"],
-      schedule: this.$store.getters["schedule"]
+      days: this.$store.getters["university/days"],
+      pairs: this.$store.getters["university/pairs"],
+      schedule: this.$store.getters["university/schedule"]
     };
   }
 };

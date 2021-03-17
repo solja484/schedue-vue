@@ -4,7 +4,7 @@
               class="header px-5 text-14"
               v-if="state != authState">
         <b-navbar-brand class=" align-bottom " href="#">
-            <img src="../../assets/kma-logo-white.png"
+            <img src="../../assets/KMA-logo-white.png"
                  alt="kma logo"
                  class="kma-brand"/>
         </b-navbar-brand>
@@ -71,10 +71,10 @@
         },
         data() {
             return {
-                auth: this.$store.getters["auth"],
-                state: this.$store.getters["currentState"],
-                userRole: this.$store.getters["role"],
-                user: this.$store.getters["user"],
+                auth: this.$store.getters["state/auth"],
+                state: this.$store.getters["state/currentState"],
+                userRole: this.$store.getters["state/role"],
+                user: this.$store.getters["state/user"],
                 guest: Role.GUEST,
                 authState: CurrentState.AUTH,
                 profileState: CurrentState.USER_PROFILE,
@@ -84,18 +84,18 @@
         methods: {
             logout: function () {
                 this.$store
-                    .dispatch("logout")
+                    .dispatch("state/logout")
                     .then(() => {
                         if (this.state != CurrentState.MAIN) {
                             this.$router.push("/");
-                            this.$store.dispatch("changeCurrentState", CurrentState.MAIN);
+                            this.$store.dispatch("state/changeCurrentState", CurrentState.MAIN);
                         }
                     })
                     .catch(err => console.log(err));
             },
             redirectTo: function (newState) {
                 this.$store
-                    .dispatch("changeCurrentState", newState)
+                    .dispatch("state/changeCurrentState", newState)
                     .then(() => {
                         if (newState == CurrentState.USER_PROFILE)
                             this.$router.push("/" + this.userRole + "/" + this.user.code);

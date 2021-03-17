@@ -36,7 +36,7 @@
                 speciality: ScheduleType.SPECIALITY,
                 sub_faculty: ScheduleType.SUBFACULTY,
                 session: ScheduleType.SESSION,
-                methodist: this.$store.getters['user'].methodist,
+                methodist: this.$store.getters['state/user'].methodist,
             }
         },
         methods: {
@@ -45,7 +45,7 @@
             },
             newSchedule: function () {
                 this.$store
-                    .dispatch("changeCurrentState", CurrentState.SCHEDULE_NEW)
+                    .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_NEW)
                     .then(() => {
                         this.$router.push("/schedules/new").then();
                     })
@@ -57,11 +57,11 @@
                 return this.$store.getters['loading'];
             },
             methodistSchedules: function () {
-                return this.$store.getters['methodistSchedules'];
+                return this.$store.getters['list/methodist'];
             }
         },
         mounted() {
-            this.$store.dispatch('fetchMethodistSchedules');
+            this.$store.dispatch('list/fetchMethodistSchedules');
         }
     };
 </script>

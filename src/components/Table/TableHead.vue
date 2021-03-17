@@ -25,7 +25,7 @@ import {CurrentState} from "../../models/entities/CurrentState";
         data() {
             return {
                 session_type: ScheduleType.SESSION,
-                currentState:this.$store.getters['currentState'],
+                currentState:this.$store.getters['state/currentState'],
                 createState:CurrentState.SCHEDULE_CREATE,
                 editState:CurrentState.SCHEDULE_EDIT
             }

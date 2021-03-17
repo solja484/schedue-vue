@@ -18,14 +18,14 @@
         components: {BBreadcrumb, BBreadcrumbItem},
         data() {
             return {
-                links: this.$store.getters["breadcrumbs"][this.type]
+                links: this.$store.getters["state/breadcrumbs"][this.type]
             };
         },
         props: ["type"],
         methods: {
             redirectTo: function (link) {
                 this.$store
-                    .dispatch("changeCurrentState", link.state)
+                    .dispatch("state/changeCurrentState", link.state)
                     .then(() =>
                         this.$router.push(link.href).then())
                     .catch(err =>

@@ -14,7 +14,7 @@
         name: "UserInfo",
         data() {
             return {
-                user: this.$store.getters["user"]
+                user: this.$store.getters["state/user"]
             };
         },
     }

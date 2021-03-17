@@ -23,7 +23,7 @@
             }
         },
         created(){
-            this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_CREATE);
+            this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_CREATE);
         }
     };
 </script>

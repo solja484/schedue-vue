@@ -7,11 +7,8 @@
             <button class="btn m-0" :disabled="disable"><i class="fa fa-plus"></i></button>
         </td>
         <td class="py-2 bold no-padding text-middle-left">
-            <!--b-form-input type="text" class="form-control m-0 h-100 sharp-border px-0 text-center"
-                          v-model="course_code" :disabled="disable">
-            </b-form-input-->
             <autocomplete
-                    :default-value="currentState==editState ? course_code +' '+course_name :''"
+                    :default-value="default_value"
                     :search="search"
                     :get-result-value="getResultValue"
                     @submit="onSubmit" :disabled="disable">
@@ -46,7 +43,6 @@
                 </template>
             </autocomplete>
         </td>
-
         <td class="py-2 italic no-padding text-middle">
             <b-form-input type="text" class="form-control m-0 h-100 sharp-border"
                           v-model="course_teacher" :disabled="disable">
@@ -79,9 +75,10 @@
 </template>
 
 <script>
-    import {examination} from "../../assets/api/levels"
+    import {examination} from "../../assets/data/levels"
     import {BFormInput, BFormSelect, BFormSelectOption} from "bootstrap-vue"
     import {ScheduleType} from "../../models/entities/ScheduleType";
+    import {CurrentState} from "../../models/entities/CurrentState";
     import Autocomplete from '@trevoreyre/autocomplete-vue';
 
     export default {
@@ -90,7 +87,9 @@
         props: ['row', 'schedule_type', 'disable'],
         data() {
             return {
-                currentState:this.store.getters['currentState'],
+                currentState: this.$store.getters['state/currentState'],
+                editState:CurrentState.SCHEDULE_EDIT,
+                session_type: ScheduleType.SESSION,
                 course_name: this.row.name,
                 course_code: this.row.course_code,
                 course_teacher: this.row.teacher,
@@ -99,16 +98,17 @@
                 course_room: this.row.classroom,
                 course_group: this.row.group,
                 exam_types: examination,
-                session_type: ScheduleType.SESSION,
-                groups:[this.row.group]
+                groups: [this.row.group]
             }
         },
         computed: {
             courses: function () {
-                return this.$store.getters['scheduleCourses'];
+                return this.$store.getters['schedule/availableCourses'];
             },
-            default_value:function(){
-                if(this.row) {return this.row.course_code + ' ' +this.row.name;}
+            default_value: function () {
+                if (this.row) {
+                    return this.row.course_code + ' ' + this.row.name;
+                }
                 return false;
             }
         },
@@ -118,28 +118,30 @@
                 if (this.row.group == 100) return "";
                 return this.row.group;
             },
-            search:function(input) {
-                if (input.length < 1) { return [] }
+            search: function (input) {
+                if (input.length < 1) {
+                    return []
+                }
                 return this.courses.filter(course => {
                     return course.name.toLowerCase()
-                        .startsWith(input.toLowerCase())||course.course_code.toString().startsWith(input)
+                        .startsWith(input.toLowerCase()) || course.course_code.toString().startsWith(input)
                 });
             },
-            onSubmit:function(result) {
-                this.course_code=result.course_code;
-                this.course_name=result.name;
+            onSubmit: function (result) {
+                this.course_code = result.course_code;
+                this.course_name = result.name;
             },
-            getResultValue:function(result) {
-                return result.course_code+" "+result.name;
+            getResultValue: function (result) {
+                return result.course_code + " " + result.name;
             }
         },
-        watch:{
-            course_name:function(){
-            let res=[];
-            let course = this.courses.find(course => course.course_code==this.course_code);
-            for(let i=0;i<=course.actual_group;i++) res.push(i);
-            this.groups=res;
-        }
+        watch: {
+            course_name: function () {
+                let res = [];
+                let course = this.courses.find(course => course.course_code == this.course_code);
+                for (let i = 0; i <= course.actual_group; i++) res.push(i);
+                this.groups = res;
+            }
         }
     }
 </script>
@@ -147,17 +149,18 @@
 <style scoped>
     @import '../../../node_modules/@trevoreyre/autocomplete-vue/dist/style.css';
 
-    .autocomplete-result-list li{
-        background-image: none!important;
-        padding: 2px 5px!important;
-        font-size: 14px!important;
+    .autocomplete-result-list li {
+        background-image: none !important;
+        padding: 2px 5px !important;
+        font-size: 14px !important;
         font-weight: normal;
         text-align: left;
     }
 
-    .autocomplete i{
-        display: none!important;
+    .autocomplete i {
+        display: none !important;
     }
+
     .italic {
         font-style: italic;
     }
@@ -178,6 +181,7 @@
         text-align: left;
         vertical-align: middle !important;
     }
+
     .text-middle {
         text-align: center;
         vertical-align: middle !important;

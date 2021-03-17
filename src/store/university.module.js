@@ -1,8 +1,7 @@
-import {levels, seasons} from "../assets/api/levels";
-import {schedule_types} from "../assets/api/schedule_types";
+import {levels, seasons} from "../assets/data/levels";
+import {schedule_types} from "../assets/data/schedule_types";
 import axios from "axios";
 
-const currentYear = 2020, currentSeason=2;
 
 const universityModule = {
     namespaced: true,
@@ -14,30 +13,21 @@ const universityModule = {
         pairs: [],
         levels: levels,
         seasons: seasons,
-        academic_year: currentYear,
+        academic_year: 2020,
         schedule_types: schedule_types,
-        current_season:currentSeason
+        current_season: 2
     },
     getters: {
         days: state => state.days,
-        pairs:
-            state => state.pairs,
-        faculties:
-            state => state.faculties,
-        sub_faculty:
-            state => state.sub_faculty,
-        speciality:
-            state => state.speciality,
-        levels:
-            state => state.levels,
-        seasons:
-            state => state.seasons,
-        academic_year:
-            state => state.academic_year,
-        schedule_types:
-            state => state.schedule_types,
-        currentSeason:
-            state => state.current_season
+        pairs: state => state.pairs,
+        faculties: state => state.faculties,
+        sub_faculty: state => state.sub_faculty,
+        speciality: state => state.speciality,
+        levels: state => state.levels,
+        seasons: state => state.seasons,
+        academic_year: state => state.academic_year,
+        schedule_types: state => state.schedule_types,
+        currentSeason: state => state.current_season
     },
     actions: {
         fetchFaculties({commit}) {
@@ -119,7 +109,6 @@ const universityModule = {
         }
     }
 
-}
-;
+};
 
 export default universityModule;

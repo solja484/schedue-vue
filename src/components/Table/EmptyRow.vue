@@ -50,7 +50,7 @@
         },
         computed: {
             courses: function () {
-                return this.$store.getters['scheduleCourses'];
+                return this.$store.getters['schedule/availableCourses'];
             }
         },
         methods: {

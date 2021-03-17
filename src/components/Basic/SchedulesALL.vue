@@ -36,7 +36,7 @@
                 speciality: ScheduleType.SPECIALITY,
                 sub_faculty: ScheduleType.SUBFACULTY,
                 session: ScheduleType.SESSION,
-                userRole: this.$store.getters['userRole'],
+                userRole: this.$store.getters['state/userRole'],
                 methodistRole: Role.METHODIST
             }
         },
@@ -46,12 +46,12 @@
             }
         },
         mounted() {
-            this.$store.dispatch("fetchFinalSchedules");
+            this.$store.dispatch("list/fetchFinalSchedules");
         },
         methods: {
             newSchedule: function () {
                 this.$store
-                    .dispatch("changeCurrentState", CurrentState.SCHEDULE_NEW)
+                    .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_NEW)
                     .then(() => {
                         this.$router.push("/schedules/new");
                     })

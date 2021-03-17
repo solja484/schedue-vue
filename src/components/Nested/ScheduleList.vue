@@ -1,29 +1,37 @@
 <template>
     <div v-if="!loading">
-        <ScheduleListELem v-for="s in schedulesFiltered" :key="s.code" :code="s.code" :title="s.title"></ScheduleListELem>
+        <ScheduleListELem v-for="s in schedulesFiltered" :key="s.code" :code="s.code"
+                          :title="s.title"></ScheduleListELem>
     </div>
 </template>
 
 <script>
     import {ScheduleType} from "../../models/entities/ScheduleType";
     import ScheduleListELem from "../Nested/ScheduleListELem";
+
     export default {
         name: "ScheduleList",
-        components:{ScheduleListELem},
-        props:['type','faculty','sub_faculty','level'],
-        data(){
+        components: {ScheduleListELem},
+        props: ['type', 'faculty', 'sub_faculty', 'level'],
+        data() {
             return {
-                subFacultyType:ScheduleType.SUBFACULTY
+                subFacultyType: ScheduleType.SUBFACULTY
             }
         },
-        computed:{
-            schedules: function(){return this.$store.getters['finalSchedules'];},
-            loading: function(){ return this.$store.getters['loading'];},
-            schedulesFiltered: function(){
-                if(this.type==this.subFacultyType)
-                    return this.schedules.filter(s=>s.schedule_type==this.type && s.faculty_id==this.faculty && this.sub_faculty==s.subfaculty_id);
+        computed: {
+            schedules: function () {
+                return this.$store.getters['list/final'];
+            },
+            loading: function () {
+                return this.$store.getters['loading'];
+            },
+            schedulesFiltered: function () {
+                if (this.type == this.subFacultyType)
+                    return this.schedules.filter(s => s.schedule_type == this.type
+                        && s.faculty_id == this.faculty && this.sub_faculty == s.subfaculty_id);
                 else
-                return this.schedules.filter(s=>s.schedule_type==this.type && s.faculty_id==this.faculty && this.level==s.study_year)
+                    return this.schedules.filter(s => s.schedule_type == this.type
+                        && s.faculty_id == this.faculty && this.level == s.study_year)
             }
         }
     }

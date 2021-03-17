@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div v-if="!loading">
+        <p>{{courses}}</p>
         <button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
                 :disabled="selected_speciality==null&&selected_sub_faculty==null"><i class="fa fa-save"></i> Зберегти
         </button>
@@ -54,7 +55,7 @@
             <div class="row">
                 <strong class="col-sm-2 text-right text-14 vertical-middle">Триместр</strong>
                 <b-form-select v-model="selected_season" class="col-sm-1 text-14 mb-1" size="sm">
-                    <b-form-select-option v-for="s in university.seasons" :key="s.number" :value="s.number"
+                    <b-form-select-option v-for="s in seasons" :key="s.number" :value="s.number"
                                           class="text-14">
                         {{s.title}}
                     </b-form-select-option>
@@ -63,8 +64,8 @@
             <div class="row">
                 <strong class="col-sm-2 text-right text-14">Рік</strong>
                 <b-form-select v-model="selected_academic_year" class="col-sm-1 text-14 mb-1" size="sm">
-                    <b-form-select-option :value="university.academic_year" class="text-14">
-                        {{university.academic_year}}
+                    <b-form-select-option :value="academic_year" class="text-14">
+                        {{academic_year}}
                     </b-form-select-option>
                     <b-form-select-option :value="next_academic_year" class="text-14">
                         {{next_academic_year}}
@@ -72,15 +73,15 @@
                 </b-form-select>
             </div>
             <div class="row mt-2">
-                <strong class="col-sm-2 text-right text-14">Додатково</strong>
-                <b-form-input class="col-sm-4 t text-14" maxlength="100"></b-form-input>
+                <strong class="col-sm-2 text-right text-14">Назва</strong>
+                <b-form-input class="col-sm-4 t text-14" maxlength="100" v-model="selected_name"></b-form-input>
             </div>
         </div>
         <div class="px-5 mt-3" v-if="!loading">
-            <ViewTable  :schedule_type="schedule_type"
-                        :code="schedule_code"
-                           :currentState="currentState"
-                           :disable="selected_speciality==null&&selected_sub_faculty==null"></ViewTable>
+            <ViewTable :schedule_type="schedule_type"
+                       :code="schedule_code"
+                       :currentState="currentState"
+                       :disable="selected_speciality==null&&selected_sub_faculty==null"></ViewTable>
         </div>
     </div>
 </template>
@@ -109,28 +110,29 @@
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
                 academic_year: this.$store.getters['university/academic_year'],
-                methodist: this.$store.getters['user'].methodist,
-                sub_faculty_all:this.$store.getters['university/sub_faculty'],
-                speciality_all:this.$store.getters['university/speciality'],
-                faculty_all:this.$store.getters['university/faculties'],
-                sub_faculty: [],
-                speciality: [],
+                methodist: this.$store.getters['state/user'].methodist,
+                sub_faculty_all: this.$store.getters['university/sub_faculty'],
+                speciality_all: this.$store.getters['university/speciality'],
+                faculty_all: this.$store.getters['university/faculties'],
+                editInfo:this.$store.getters['schedule/editInfo'],
                 yearsByLevel: this.$store.getters['university/levels'].filter(l => l.level == 1),
-                selected_faculty: this.$store.getters['user'].methodist.faculty_id,
-                selected_speciality: this.$store.getters['editableSchedule'].selected_speciality,
-                selected_sub_faculty: this.$store.getters['editableSchedule'].selected_sub_faculty,
-                selected_study_year: this.$store.getters['editableSchedule'].selected_study_year,
-                selected_season: this.$store.getters['editableSchedule'].selected_season,
-                selected_academic_year: this.$store.getters['editableSchedule'].selected_academic_year,
-                notes: this.$store.getters['editableSchedule'].notes,
-                selected_level: this.$store.getters['editableSchedule'].selected_level,
-                schedule_type: this.$store.getters['editableSchedule'].schedule_type,
-                schedule_code: this.$store.getters['editableSchedule'].schedule_code,
+                selected_faculty: this.$store.getters['state/user'].methodist.faculty_id,
+                selected_speciality: this.$store.getters['schedule/editInfo'].speciality_id,
+                selected_sub_faculty: this.$store.getters['schedule/editInfo'].subfaculty_id,
+                selected_study_year: this.$store.getters['schedule/editInfo'].study_year,
+                selected_season: this.$store.getters['schedule/editInfo'].season,
+                selected_academic_year: this.$store.getters['schedule/editInfo'].academic_year,
+                selected_name:this.$store.getters['schedule/editInfo'].title,
+                selected_level: this.$store.getters['schedule/editInfo'].level,
+                schedule_type: this.$store.getters['schedule/editInfo'].type,
+                schedule_code: this.$store.getters['schedule/editInfo'].code,
                 sub_faculty_type: ScheduleType.SUBFACULTY,
+                seasons:this.$store.getters['university/seasons'],
                 level_options: [
                     {text: 'Бакалаврська', value: 1},
                     {text: 'Магістерська', value: 2}
-                ]
+                ],
+                courses:this.$store.getters['schedule/availableCourses']
             }
         },
         computed: {
@@ -169,7 +171,7 @@
                     "academic_year": this.selected_academic_year,
                     "season": this.selected_season
                 };
-                this.$store.dispatch('selectNewScheduleCourses', data);
+                this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             selected_sub_faculty: function () {
                 console.log("watcher");
@@ -179,7 +181,7 @@
                     "academic_year": this.selected_academic_year,
                     "season": this.selected_season
                 };
-                this.$store.dispatch('selectNewScheduleCourses', data);
+                this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             selected_academic_year: function () {
                 console.log("watcher");
@@ -190,20 +192,24 @@
                     "academic_year": this.selected_academic_year,
                     "season": this.selected_season
                 };
-                this.$store.dispatch('selectNewScheduleCourses', data);
+                this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             selected_season: function () {
                 console.log("watcher");
+                this.fetchAvailableCourses();
+            },
+        },
+        methods: {
+            fetchAvailableCourses: function () {
                 let data = {
+                    "speciality": this.selected_speciality,
                     "faculty": this.methodist.faculty_id,
                     "level": this.selected_level,
                     "academic_year": this.selected_academic_year,
                     "season": this.selected_season
                 };
-                this.$store.dispatch('selectNewScheduleCourses', data);
+                this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
-        },
-        methods: {
             saveSchedule: function () {
                 const data = {
                     "selected_faculty": this.selected_faculty,
@@ -217,15 +223,20 @@
                     "schedule_type": this.schedule_type
                 };
                 console.log(data);
-                this.$store.dispatch('editSchedule', data).then((res) => {
-                    this.$router.push('/view/' + res.code);
-                })
+                if (this.currentState == this.editState)
+                    this.$store.dispatch('editSchedule', data).then((res) => {
+                        this.$router.push('/view/' + res.code);
+                    });
+                else if (this.currentState == this.createState)
+                    this.$store.dispatch('createSchedule', data).then((res) => {
+                        this.$router.push('/view/' + res.code);
+                    });
             }
         },
         mounted() {
-            if (!this.$store.getters['user'].methodist&&this.currentState==this.editState)
+            if (!this.$store.getters['state/user'].methodist && this.currentState == this.editState)
                 this.$router.push('/schedules/view/' + this.$route.params.code);
-            if(this.$store.getters['currentState']!=this.currentState)
+            else if (this.$store.getters['state/currentState'] != this.currentState)
                 this.$router.push('/schedules/view/' + this.$route.params.code);
         }
     }

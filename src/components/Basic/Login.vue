@@ -35,13 +35,12 @@
         methods: {
             loginF: function () {
                 this.$store
-                    .dispatch("login", this.form)
+                    .dispatch("state/login", this.form)
                     .then(() => {
                         let user = this.$store.getters["user"];
                         let userRole = this.$store.getters["role"];
+                        this.$store.dispatch("state/changeCurrentState", CurrentState.USER_PROFILE);
                         this.$router.push("/" + userRole + "/" + user.code);
-                        this.$store.dispatch("changeCurrentState", CurrentState.USER_PROFILE
-                        );
                     })
                     .catch(err => console.log(err));
             }

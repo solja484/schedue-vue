@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!loading">
+    <div>
         <Header></Header>
         <Breadcrumbs type="VIEW"></Breadcrumbs>
         <ScheduleInfo></ScheduleInfo>
@@ -17,13 +17,8 @@
     export default {
         name: "ViewPage",
         components: {Footer, ScheduleInfo, Breadcrumbs, Header},
-        computed: {
-            loading: function () {
-                return this.$store.getters['loading'];
-            }
-        },
         mounted() {
-            this.$store.dispatch('changeCurrentState', CurrentState.SCHEDULE_VIEW);
+            this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_VIEW);
         }
     };
 </script>
