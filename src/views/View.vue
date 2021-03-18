@@ -2,7 +2,7 @@
     <div>
         <Header></Header>
         <Breadcrumbs type="VIEW"></Breadcrumbs>
-        <ScheduleInfo></ScheduleInfo>
+        <ScheduleInfo :currentState="viewState"></ScheduleInfo>
         <Footer></Footer>
     </div>
 </template>
@@ -17,6 +17,11 @@
     export default {
         name: "ViewPage",
         components: {Footer, ScheduleInfo, Breadcrumbs, Header},
+        data(){
+            return{
+                viewState:CurrentState.SCHEDULE_VIEW
+            }
+        },
         mounted() {
             this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_VIEW);
         }

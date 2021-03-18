@@ -3,7 +3,7 @@
         <Title message="Додати розклад"></Title>
         <div class="mx-5 ">
             <form class="w-50 px-3 form-center">
-                <label for="new-schedule-type" class="text-16">Створити розклад:</label>
+                <label for="new-schedule-type" class="text-16">Тип розкладу:</label>
                 <b-form-select
                         id="new-schedule-type"
                         v-model="selected"
@@ -50,15 +50,20 @@
                 code: null
             };
         },
+        computed: {
+            loading: function () {
+                return this.$store.getters['loading'];
+            }
+        },
         methods: {
             createNewSchedule: function () {
-                this.$store
-                    .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_CREATE)
+
+                this.$store.dispatch("schedule/setCreateScheduleData", this.selected)
                     .then(() =>
-                        this.$store.dispatch("schedule/setCreateScheduleData").then(() =>
-                            this.$store.dispatch("schedule/setCreateType", this.selected).then(() =>
-                                this.$router.push("/schedules/create"))))
-                    .catch(err => console.log(err));
+                        this.$store
+                            .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_CREATE))
+                    .catch(err => console.log(err))
+                    .finally(() => this.$router.push("/schedules/create"));
             }
         }
     };

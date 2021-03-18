@@ -1,7 +1,8 @@
 <template>
     <table class="table table-bordered table-align" :class="{'table-hover':!disable}" id="schedule">
         <TableHead :schedule_type="schedule_type"></TableHead>
-        <TableDay v-for="day in days" :key="day.number" :day="day" :schedule_type="schedule_type" :disable="disable"></TableDay>
+        <TableDay v-for="day in days" :key="day.number"
+                  :day="day" :schedule_type="schedule_type" :disable="disable" :currentState="currentState"></TableDay>
     </table>
 </template>
 

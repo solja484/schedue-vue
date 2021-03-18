@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="px-5 mt-3">
-            <ViewTable :schedule_type="schedule.schedule_type" :code="schedule.code"></ViewTable>
+            <ViewTable :schedule_type="schedule.schedule_type" :code="schedule.code" :currentState="currentState"></ViewTable>
         </div>
     </div>
 </template>
@@ -45,6 +45,7 @@
     export default {
         name: "ScheduleInfo",
         components: {ViewTable, Title},
+        props:['currentState'],
         data() {
             return {
                 seasons: this.$store.getters['university/seasons'],

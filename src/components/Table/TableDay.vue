@@ -10,7 +10,7 @@
     <tbody v-else class="p-0">
     <tr class="p-0">
         <td :rowspan='rowspan_all' class="text-middle p-0 m-0">
-            <div class="rotate text-middle bold p-0 m-0">{{day.name}}</div>
+            <div class="rotate text-middle bold p-0 m-0">{{day.name}}{{currentState}}</div>
         </td>
     </tr>
     <EditableTableRow v-for="row in rows_all" :key="row.id" class="p-0"
@@ -30,12 +30,11 @@
     export default {
         name: "TableDay",
         components: {TableRow, EditableTableRow},
-        props: ["day", "schedule_type", 'disable'],
+        props: ["day", "schedule_type", 'disable','currentState'],
         data() {
             return {
                 pairs: this.$store.getters['university/pairs'],
                 session_type: ScheduleType.SESSION,
-                currentState: this.$store.getters['state/currentState'],
                 viewState: CurrentState.SCHEDULE_VIEW,
                 editState: CurrentState.SCHEDULE_EDIT
             }

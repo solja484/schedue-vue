@@ -3,12 +3,25 @@
         <td :rowspan="row.rowspan" class="px-0 py-2 text-center text-middle">{{row.time}}</td>
     </tr>
     <tr v-else>
-        <!--td colspan="6">{{courses}}</td-->
         <td class="no-padding text-middle">
-            <button class="btn m-0" :disabled="disable"><i class="fa fa-plus"></i></button>
+            <button class="btn m-0 text-muted" :disabled="disable"><i class="fa fa-plus"></i></button>
         </td>
         <td class="py-2 bold no-padding text-middle-left">
             <Autocomplete
+                    v-if="default_value==''"
+                    :search="search"
+                    :get-result-value="getResultValue"
+                    @submit="onSubmit" :disabled="disable">
+                <template #result="{ result, props }">
+                    <li
+                            v-bind="props"
+                            class="autocomplete-result wiki-result">
+                        <strong>{{ result.course_code }} </strong>{{ result.name }}
+                    </li>
+                </template>
+            </Autocomplete>
+            <Autocomplete
+                    v-else
                     :default-value="default_value"
                     :search="search"
                     :get-result-value="getResultValue"
@@ -67,6 +80,7 @@
             return {
                 currentState: this.$store.getters['state/currentState'],
                 editState:CurrentState.SCHEDULE_EDIT,
+                createState:CurrentState.SCHEDULE_CREATE,
                 session_type: ScheduleType.SESSION,
                 course_name: this.row.name,
                 course_code: this.row.course_code,
@@ -86,12 +100,10 @@
                 return this.$store.getters['schedule/availableCourses'];
             },
             default_value: function () {
-                if (this.row) {
-                    return this.row.course_code + ' ' + this.row.name;
+                if(this.row.name.length==0) return "";
+                    return this.row.course_code+" "+this.row.name;
                 }
-                return false;
-            }
-        },
+            },
         methods: {
             getCourseGroup: function () {
                 if (this.row.group == 0) return 'Лекція';
