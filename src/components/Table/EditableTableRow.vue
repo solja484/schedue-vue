@@ -3,58 +3,37 @@
         <td :rowspan="row.rowspan" class="px-0 py-2 text-center text-middle">{{row.time}}</td>
     </tr>
     <tr v-else>
+        <!--td colspan="6">{{courses}}</td-->
         <td class="no-padding text-middle">
             <button class="btn m-0" :disabled="disable"><i class="fa fa-plus"></i></button>
         </td>
         <td class="py-2 bold no-padding text-middle-left">
-            <autocomplete
+            <Autocomplete
                     :default-value="default_value"
                     :search="search"
                     :get-result-value="getResultValue"
                     @submit="onSubmit" :disabled="disable">
-                <template
-                        #default="{rootProps,
-                    inputProps,
-                    inputListeners,
-                    resultListProps,
-                    resultListListeners,
-                    results,
-                    resultProps}">
-                    <div v-bind="rootProps">
-                        <input
-                                v-bind="inputProps"
-                                v-on="inputListeners"
-                                class="form-control m-0 h-100 sharp-border bold"
-                                :class="[
-                            { 'autocomplete-input-no-results': noResults },
-                            { 'autocomplete-input-focused': focused }]"
-                                @focus="handleFocus"
-                                @blur="handleBlur"
-                        />
-                        <ul v-bind="resultListProps" v-on="resultListListeners">
-                            <li
-                                    v-for="(result, index) in results"
-                                    :key="resultProps[index].id"
-                                    v-bind="resultProps[index]">
-                                <strong>{{ result.course_code }} </strong>{{ result.name }}
-                            </li>
-                        </ul>
-                    </div>
+                <template #result="{ result, props }">
+                    <li
+                            v-bind="props"
+                            class="autocomplete-result wiki-result">
+                        <strong>{{ result.course_code }} </strong>{{ result.name }}
+                    </li>
                 </template>
-            </autocomplete>
+            </Autocomplete>
         </td>
         <td class="py-2 italic no-padding text-middle">
-            <b-form-input type="text" class="form-control m-0 h-100 sharp-border"
+            <b-form-input type="text" class="form-control m-0  sharp-border"
                           v-model="course_teacher" :disabled="disable">
             </b-form-input>
         </td>
         <td v-if="schedule_type==session_type" class="px-0 py-2 text-center no-padding text-middle">
-            <b-form-select type="text" class="form-control m-0 h-100 sharp-border"
+            <b-form-select type="text" class="form-control m-0  sharp-border"
                            v-model="course_exam" :options="exam_types" :disabled="disable">
             </b-form-select>
         </td>
         <td class="px-0 py-2 text-center no-padding text-middle">
-            <b-form-select type="text" class="form-control m-0 h-100 sharp-border"
+            <b-form-select type="text" class="form-control m-0  sharp-border"
                            v-model="course_group" :disabled="disable">
                 <b-form-select-option v-for="g in groups" :key="g" :value="g" class="text-14">
                     {{g==0? "Лекція":g!=100? g :"" }}
@@ -62,12 +41,12 @@
             </b-form-select>
         </td>
         <td class="px-0 py-2 text-center no-padding text-middle">
-            <b-form-input type="text" class="form-control m-0 h-100 sharp-border"
+            <b-form-input type="text" class="form-control m-0  sharp-border"
                           v-model="course_weeks" :disabled="disable">
             </b-form-input>
         </td>
         <td class="px-0 py-2 text-center no-padding text-middle">
-            <b-form-input type="text" class="form-control m-0 h-100 sharp-border"
+            <b-form-input type="text" class="form-control m-0  sharp-border"
                           v-model="course_room" :disabled="disable">
             </b-form-input>
         </td>
@@ -80,7 +59,6 @@
     import {ScheduleType} from "../../models/entities/ScheduleType";
     import {CurrentState} from "../../models/entities/CurrentState";
     import Autocomplete from '@trevoreyre/autocomplete-vue';
-
     export default {
         name: "EditableTableRow",
         components: {BFormInput, BFormSelect, BFormSelectOption, Autocomplete},
@@ -98,7 +76,9 @@
                 course_room: this.row.classroom,
                 course_group: this.row.group,
                 exam_types: examination,
-                groups: [this.row.group]
+                groups: [this.row.group],
+                focused:false,
+
             }
         },
         computed: {
@@ -147,7 +127,9 @@
 </script>
 
 <style scoped>
-    @import '../../../node_modules/@trevoreyre/autocomplete-vue/dist/style.css';
+    @import '../../assets/scss/autocomplete.css';
+
+
 
     .autocomplete-result-list li {
         background-image: none !important;
@@ -155,10 +137,6 @@
         font-size: 14px !important;
         font-weight: normal;
         text-align: left;
-    }
-
-    .autocomplete i {
-        display: none !important;
     }
 
     .italic {

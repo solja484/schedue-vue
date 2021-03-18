@@ -1,39 +1,18 @@
 <template>
     <div>
-        <autocomplete
+        <Autocomplete
+                :default-value="default_value"
                 :search="search"
                 :get-result-value="getResultValue"
-                @submit="onSubmit">
-            <template
-                    #default="{rootProps,
-                    inputProps,
-                    inputListeners,
-                    resultListProps,
-                    resultListListeners,
-                    results,
-                    resultProps}">
-                <div v-bind="rootProps">
-                    <input
-                            v-bind="inputProps"
-                            v-on="inputListeners"
-                            class="p-2 m-0 form-control"
-                            :class="[
-                            { 'autocomplete-input-no-results': noResults },
-                            { 'autocomplete-input-focused': focused }]"
-                            @focus="handleFocus"
-                            @blur="handleBlur"
-                    />
-                    <ul v-bind="resultListProps" v-on="resultListListeners">
-                        <li
-                                v-for="(result, index) in results"
-                                :key="resultProps[index].id"
-                                v-bind="resultProps[index]">
-                            {{ result.name }}
-                        </li>
-                    </ul>
-                </div>
+                @submit="onSubmit" :disabled="disable">
+            <template #result="{ result, props }">
+                <li
+                        v-bind="props"
+                        class="autocomplete-result">
+                    <strong>{{ result.course_code }} </strong>{{ result.name }}
+                </li>
             </template>
-        </autocomplete>
+        </Autocomplete>
 
     </div>
 </template>
@@ -55,16 +34,16 @@
         },
         methods: {
             search: function (input) {
-                if (input.length < 1){
-                    return [];}
+                if (input.length < 1) {
+                    return []
+                }
                 return this.courses.filter(course => {
                     return course.name.toLowerCase()
-                        .startsWith(input.toLowerCase())
+                        .startsWith(input.toLowerCase()) || course.course_code.toString().startsWith(input)
                 });
             },
             onSubmit: function (result) {
                 alert(`You selected ${result.name}`);
-
             },
             getResultValue: function (result) {
                 console.log(result);
@@ -76,7 +55,7 @@
 
 <style scoped>
 
-    .autocomplete-result-list li{
+    .autocomplete-result{
         background-image: none!important;
         padding: 2px 5px!important;
         font-size: 14px!important;
