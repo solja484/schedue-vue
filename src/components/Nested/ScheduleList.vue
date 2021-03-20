@@ -1,7 +1,7 @@
 <template>
     <div v-if="!loading">
         <ScheduleListELem v-for="s in schedulesFiltered" :key="s.code" :code="s.code"
-                          :title="s.title"></ScheduleListELem>
+                          :title="s.title" ></ScheduleListELem>
     </div>
 </template>
 

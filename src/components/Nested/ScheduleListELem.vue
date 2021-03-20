@@ -20,7 +20,7 @@
             viewSchedule: function () {
                 this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_VIEW)
                     .then(() => this.$router.push('/schedules/view/' + this.code));
-            }
+            },
         }
     };
 </script>
@@ -38,6 +38,9 @@
         font-size: 16px;
     }
 
+    .text-24 {
+        font-size: 24px;
+    }
     .info-button {
         background: $info !important;
         border-color: $info-border !important;
