@@ -90,22 +90,33 @@
                     :table-props="{ bordered: true, striped: true, align:true }"
             ></b-skeleton-table>
         </div>
-        <div class="mx-5 pl-5 pr-0">
+        <div class="mx-5 pl-5 pr-0 mb-5">
             <div class="row ml-5 text-middle">
-                <button @click="saveSchedule" class="btn btn-info btn-lg mt-2 mb-5 col-md-2 info-button"
+                <button @click="saveSchedule" class="btn btn-info btn-lg mt-2 col-md-2 info-button"
                         :disabled="selected_speciality==null&&selected_sub_faculty==null"><i class="fa fa-save"></i>
                     Зберегти зміни
                 </button>
                 <div class="col-md-7"></div>
                 <div class="col-md-3">
-                    <a class="text-danger text-16 p-2 text-middle float-right pointer" @click="deleteSchedule">
+                    <a class="text-danger text-16 p-2 text-middle float-right pointer"
+                       @click="showDeleteAlert=!showDeleteAlert">
                         <i class="fa fa-trash mx-1"></i>
                         Видалити розклад</a>
                 </div>
-
             </div>
-        </div>
 
+        </div>
+        <b-alert fade variant="danger" dismissible class="mx-5 px-5 delete-alert" v-model="showDeleteAlert">
+            <h4 class="alert-heading">Видалення розкладу</h4>
+            <hr>
+            <p>
+                Ви впевнені, що хочете видалити розклад? Відмінити цю дію буде неможливо
+            </p>
+            <p class="mb-0">
+                <button class="btn " @click="showDeleteAlert=!showDeleteAlert">Скасувати</button>
+                <button class="btn btn-danger" @click="deleteSchedule">Видалити</button>
+            </p>
+        </b-alert>
     </div>
     <div v-else>
 
@@ -167,32 +178,21 @@
     import {CurrentState} from "../../models/entities/CurrentState";
     import {ScheduleType} from "../../models/entities/ScheduleType"
     import {
-        BFormSelect,
-        BFormSelectOption,
-        BFormGroup,
-        BFormRadioGroup,
-        BFormInput,
-        BSkeletonTable,
-        BSkeleton
+        BFormSelect, BFormSelectOption, BFormGroup, BFormRadioGroup,
+        BFormInput, BSkeletonTable, BSkeleton, BAlert
     } from "bootstrap-vue";
     import ViewTable from "../Table/ViewTable";
 
     export default {
         name: "ScheduleInfoEdit",
         components: {
-            ViewTable,
-            Title,
-            BFormSelect,
-            BFormSelectOption,
-            BFormGroup,
-            BFormRadioGroup,
-            BFormInput,
-            BSkeletonTable,
-            BSkeleton
+            ViewTable, Title, BFormSelect, BFormSelectOption, BFormGroup,
+            BFormRadioGroup, BFormInput, BSkeletonTable, BSkeleton, BAlert
         },
         props: ['currentState'],
         data() {
             return {
+                showDeleteAlert: false,
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
                 academic_year: this.$store.getters['university/academic_year'],
@@ -339,6 +339,11 @@
                     });
             },
             deleteSchedule: function () {
+                this.$store.dispatch('schedule/deleteSchedule', this.editInfo.code)
+                    .then(() =>
+                        this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULES_ALL))
+                    .then(()=>this.$router.push("/schedules"))
+                    .catch((err) => console.log(err));
                 return null;
             }
         },
@@ -366,8 +371,8 @@
         float: right !important;
     }
 
-    .pointer,.pointer:focus,.pointer:hover,.pointer:active {
-        cursor:pointer;
+    .pointer, .pointer:focus, .pointer:hover, .pointer:active {
+        cursor: pointer;
     }
 
     .text-14 {

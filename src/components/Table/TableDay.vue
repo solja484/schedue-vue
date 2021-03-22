@@ -10,7 +10,7 @@
     <tbody v-else class="p-0">
     <tr class="p-0">
         <td :rowspan='rowspan_all' class="text-middle p-0 m-0">
-            <div class="rotate text-middle bold p-0 m-0">{{day.name}}{{currentState}}</div>
+            <div class="rotate text-middle bold p-0 m-0">{{day.name}}</div>
         </td>
     </tr>
     <EditableTableRow v-for="row in rows_all" :key="row.id" class="p-0"

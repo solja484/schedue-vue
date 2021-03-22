@@ -14,7 +14,7 @@ const scheduleModule = {
         availableCourses: [],
         createInfo: {},
         loadingTable: false,
-        emptyInfo : {
+        emptyInfo: {
             faculty: null,
             faculty_id: null,
             speciality: null,
@@ -74,20 +74,20 @@ const scheduleModule = {
                     commit("setLoading", false, {root: true}));
 
         },
-        setCreateScheduleData({commit},type) {
+        setCreateScheduleData({commit}, type) {
             commit("setLoading", true, {root: true});
             console.log("set create schedule data");
             axios
                 .get('/api/schedule_new_code')
                 .then(res =>
-                    commit("setCreateScheduleData", {code:res.data,type:type}))
+                    commit("setCreateScheduleData", {code: res.data, type: type}))
                 .catch(error =>
                     console.log(error))
                 .finally(() =>
                     commit("setLoading", false, {root: true}));
         },
         fetchAvailableCourses({commit}, data) {
-           // commit("setLoading", true, {root: true});
+            // commit("setLoading", true, {root: true});
             commit("setTableLoading", true);
             axios.get('/api/courses', {
                 params: data
@@ -97,7 +97,7 @@ const scheduleModule = {
                 .catch(error =>
                     console.log(error))
                 .finally(() => {
-                 //   commit("setLoading", false, {root: true});
+                    //   commit("setLoading", false, {root: true});
                     commit("setTableLoading", false);
                 });
         },
@@ -123,11 +123,23 @@ const scheduleModule = {
                 .catch(error => console.log(error))
                 .finally(() =>
                     commit("setLoading", false, {root: true}));
+        },
+        deleteSchedule({commit}, code) {
+            commit("setLoading", true, {root: true});
+            axios
+                .post(`/api/schedule/delete`,{code:code})
+                .then(res => {
+                    console.log(res);
+                    commit("deleteSchedule");
+                })
+                .catch(error => console.log(error))
+                .finally(() =>
+                    commit("setLoading", false, {root: true}));
         }
     },
     mutations: {
         setCreateType(state, createType) {
-            console.log("SET CREATE TYPE "+createType);
+            console.log("SET CREATE TYPE " + createType);
             state.editInfo.schedule_type = createType;
         },
         setViewInfo
@@ -151,10 +163,10 @@ const scheduleModule = {
             console.log("New code below");
             console.log(data.code);
 
-            state.editInfo=state.emptyInfo;
-            state.editInfo.schedule_code= data.code;
-            state.editInfo.schedule_type= data.type;
-            state.editRows=[];
+            state.editInfo = state.emptyInfo;
+            state.editInfo.schedule_code = data.code;
+            state.editInfo.schedule_type = data.type;
+            state.editRows = [];
             console.log(state.editInfo);
         },
         setAvailableCourses(state, data) {
@@ -162,6 +174,14 @@ const scheduleModule = {
         },
         setTableLoading(state, load) {
             state.loadingTable = load;
+        },
+        deleteSchedule(state) {
+            state.viewInfo = {};
+            state.viewRows = [];
+            state.editInfo = {};
+            state.editRows = [];
+            state.availableCourses = [];
+            state.createInfo = {};
         }
     }
 };

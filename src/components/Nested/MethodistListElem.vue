@@ -4,20 +4,20 @@
         <Title :message="title" additional=""></Title>
         <div v-for="sch in schedules" :key="sch.id" class="">
             <b-icon-eye-slash v-if="sch.draft==1" class="text-muted text-28 m-2 float-left link"
-                              title="Розклад НЕ доступний для студентів"
+                              title="Розклад НЕ доступний для студентів. Натисніть, щоб відкрити доступ."
                               @click="showSchedule(sch.id)"></b-icon-eye-slash>
             <b-icon-eye v-else class="text-blue text-28  m-2 float-left"
-                        title="Розклад доступний для студентів"
+                        title="Розклад доступний для студентів. Натисніть, щоб закрити доступ."
                         @click="hideSchedule(sch.id)"></b-icon-eye>
             <BSkeleton type="input" class="mx-5 my-2" v-if="loadingElem && loadingElemId==sch.id"></BSkeleton>
             <ScheduleListELem class="mx-5" v-else
                               :code="sch.code" :title="sch.title"></ScheduleListELem>
         </div>
-        <b-alert v-model="showSuccessAlert" variant="success" dismissible class="mt-3" fade>
-            Розклад успішно відкрито для перегляду студентам!
+        <b-alert v-model="showSuccessAlert" variant="success" dismissible class="mt-3 mr-5" fade>
+            Розклад успішно відкрито для перегляду студентами!
         </b-alert>
-        <b-alert v-model="hideSuccessAlert" variant="info" dismissible class="mt-3 " fade>
-            Розклад закрито для перегляду студентам
+        <b-alert v-model="hideSuccessAlert" variant="info" dismissible class="mt-3 mr-5" fade>
+            Розклад закрито для перегляду студентами
         </b-alert>
 
     </div>
@@ -66,9 +66,6 @@
 </script>
 
 <style scoped>
-    .delay {
-        transition-delay: 2s;
-    }
 
     .text-blue {
         color: #6699CC; /*#336699;*/

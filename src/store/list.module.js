@@ -49,7 +49,7 @@ const schedulesListModule = {
         },
         changeDraftMode({commit}, data) {
             commit("setLoadingElem", true);
-            axios.post('/api/schedule_draft', data)
+            axios.post('/api/schedule/draft', data)
                 .then(() =>
                 commit("setScheduleDraftMode",data))
                 .catch((err) => console.log(err))
