@@ -1,53 +1,82 @@
 <template>
-  <div>
-    <b-button id="popover-target-1">
-      Hover Me
-    </b-button>
-    <b-popover
-      target="popover-target-1"
-      triggers="hover"
-      position="right"
-      class="text-12"
-    >
-      <template #title>
-        <b>Інтелектуальні системи</b>
-      </template>
-      <p class="my-1">
-        <span class="badge badge-secondary mr-1">4 кред.</span>
-        <span class="badge badge-secondary mr-1">120 год.</span>
-        <span class="badge badge-secondary mr-1">4 рік</span>
-        <span class="badge badge-success">Курс відбувся</span>
-      </p>
-      <p class="my-1">
-        <span class="pill code">Професійно-орієнтована</span>
-      </p>
-      <p class="my-1 text-12">
-        Факультет інформатики<br />
-        Кафедра мультимедійних систем
-      </p>
-      <p class="my-1 text-12 bold">
-        Тижні: 1-7, 9-15<br />
-        Аудиторія: дистанційно
-      </p>
-    </b-popover>
-  </div>
+    <div>
+        <b-popover
+                :target="'cell-'+item.course_cdoc+'-'+item.day_id+'-'+item.pair_id"
+                triggers="hover"
+                position="right" fade delay="70"
+                class="text-12">
+            <template #title>
+                <b>{{course.name}}</b>
+            </template>
+            <p class="my-1">
+                <span class="badge badge-secondary mr-1">{{course.credits}} кред.</span>
+                <span class="badge badge-secondary mr-1">{{course.hours}} год.</span>
+                <span class="badge badge-secondary mr-1">{{course.year}} рік</span>
+                <span class="badge badge-success" v-if="course.status_happened=='happened'">Курс відбувся</span>
+                <span class="badge badge-danger" v-else>Курс не відбувся</span>
+            </p>
+            <p class="my-1" v-for="type in reg_type" :key="type.name">
+                <span class="pill code" v-if="type.name==course.reg_type">{{type.translate}}</span>
+            </p>
+            <p class="my-1 text-12">
+                {{faculty}}<br/>
+                {{subfaculty_name}}
+            </p>
+            <p class="my-1 text-12 bold">
+                Тижні: {{item.weeks}}<br/>
+                Аудиторія: {{item.room}}
+            </p>
+        </b-popover>
+    </div>
 </template>
 
 <script>
-import { BButton, BPopover } from "bootstrap-vue";
+    import {BPopover} from "bootstrap-vue";
 
-export default {
-  name: "CourseDetails",
-  components: { BButton, BPopover }
-};
+    export default {
+        name: "CourseDetails",
+        components: {BPopover},
+        props: ['item'],
+        data() {
+            return {
+                reg_type: [{
+                    name: "mandat",
+                    translate: "Нормативна"
+                },
+                    {
+                        name: "zfree",
+                        translate: "Вільного вибору"
+                    },
+                    {
+                        name: "option",
+                        translate: "Професійно-орієнтована"
+                    }]
+            }
+        },
+        computed: {
+            course: function () {
+                return this.$store.getters['student/courses'].find(course => course.code == this.item.course_cdoc);
+            },
+            faculty: function () {
+                return this.$store.getters['university/faculties'].find(f => f.id == this.subfaculty.faculty_id).name;
+            },
+            subfaculty: function () {
+                return this.$store.getters['university/sub_faculty'].find(sub => sub.id == this.item.subfaculty);
+            },
+            subfaculty_name: function () {
+                return this.subfaculty.name;
+            }
+        }
+
+    };
 </script>
 
 <style scoped>
-.text-12 {
-  font-size: 12px;
-}
+    .text-12 {
+        font-size: 12px;
+    }
 
-.bold {
-  font-weight: bolder;
-}
+    .bold {
+        font-weight: bolder;
+    }
 </style>

@@ -1,11 +1,11 @@
 <template>
     <div class="text-center line-height-5 m-5">
-        <p><b>Користувач</b></p>
-        <p>{{ user.name }}</p>
-        <p><b>Роль</b></p>
-        <p>{{ user.role }}</p>
-        <p><b>Етап</b></p>
-        <p>Презентації курсів</p>
+        <p class="my-0"><b>Користувач</b><br>
+       {{ user.name }}<br>
+        <b>Роль</b><br>
+       {{ user.role }}<br>
+       <b>Етап</b><br>
+       Презентації курсів</p>
     </div>
 </template>
 

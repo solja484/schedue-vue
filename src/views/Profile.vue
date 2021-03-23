@@ -3,8 +3,7 @@
         <Header></Header>
         <Breadcrumbs type="PROFILE"></Breadcrumbs>
         <UserInfo></UserInfo>
-        <Title v-if="role==student" message="Розклад" additional="" class="text-center"></Title>
-        <StudentTable v-if="role==student"></StudentTable>
+        <StudentList v-if="role==student"></StudentList>
         <MethodistList v-if="role==methodist"></MethodistList>
         <Footer></Footer>
     </div>
@@ -15,14 +14,13 @@
     import Footer from "../components/Basic/Footer";
     import UserInfo from "../components/Basic/UserInfo";
     import Breadcrumbs from "../components/Basic/Breadcrumbs";
-    import StudentTable from "../components/Table/StudentTimetable";
-    import Title from "../components/Nested/Title";
+    import StudentList from "../components/Basic/StudentList";
     import {Role} from "../models/entities/Role";
     import MethodistList from "../components/Basic/MethodistList";
 
     export default {
         name: "Profile",
-        components: {MethodistList, Header, Breadcrumbs, StudentTable, UserInfo, Title, Footer},
+        components: {MethodistList, Header, Breadcrumbs, StudentList, UserInfo, Footer},
         data() {
             return {
                 role: this.$store.getters['state/role'],

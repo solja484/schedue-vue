@@ -1,15 +1,15 @@
 import {Role} from "../models/entities/Role";
 import {CurrentState} from "../models/entities/CurrentState";
 import {breadcrumbs} from "../assets/data/breadcrumbs";
-import {methodist_hardcoded} from "../assets/data/user_hardcoded";
+import {student_hardcoded} from "../assets/data/user_hardcoded";
 import axios from "axios";
 
 const stateModule = {
     namespaced: true,
     state: {
         auth: true,
-        user: methodist_hardcoded,
-        role: Role.METHODIST,
+        user: student_hardcoded,
+        role: Role.STUDENT,
         currentState: CurrentState.MAIN,
         breadcrumbs: breadcrumbs,
     },
