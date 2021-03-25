@@ -5,6 +5,8 @@ import stateModule from "./state.module";
 import studentModule from "./student.module";
 import scheduleModule from "./schedule.module";
 import schedulesListModule from "./list.module"
+import editModule from "./edit.module"
+import downloadModule from "./download.module"
 
 Vue.use(Vuex);
 
@@ -15,7 +17,9 @@ const store = new Store({
         state: stateModule,
         student: studentModule,
         schedule: scheduleModule,
-        list: schedulesListModule
+        list: schedulesListModule,
+        edit:editModule,
+        download: downloadModule
     },
     state: {
         faculty: 123,

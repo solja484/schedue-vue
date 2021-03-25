@@ -17,7 +17,7 @@
                         {{ l.title }} <i class="fa fa-sort-down"></i>
                     </button>
                     <b-collapse :id="'col-sub-' + type + l.course" class="mt-2">
-                        <ScheduleList :type="type" :faculty="f.id" :level="l.course">
+                        <ScheduleList :type="type" :faculty="f.id" :level="l.level" :year="l.year">
                         </ScheduleList>
                     </b-collapse>
                 </div>

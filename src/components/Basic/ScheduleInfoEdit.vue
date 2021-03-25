@@ -1,8 +1,8 @@
 <template>
     <div v-if="!loading">
-        <button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
+        <!--button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
                 :disabled="selected_speciality==null&&selected_sub_faculty==null"><i class="fa fa-save"></i> Зберегти
-        </button>
+        </button-->
         <Title v-if="currentState==createState" message="Новий розклад"></Title>
         <Title v-else-if="currentState==editState" message="Редагування розкладу" additional=""></Title>
         <div class="container mx-5">
@@ -104,7 +104,6 @@
                         Видалити розклад</a>
                 </div>
             </div>
-
         </div>
         <b-alert fade variant="danger" dismissible class="mx-5 px-5 delete-alert" v-model="showDeleteAlert">
             <h4 class="alert-heading">Видалення розкладу</h4>
@@ -200,7 +199,6 @@
                 sub_faculty_all: this.$store.getters['university/sub_faculty'],
                 speciality_all: this.$store.getters['university/speciality'],
                 faculty_all: this.$store.getters['university/faculties'],
-                yearsByLevel: this.$store.getters['university/levels'].filter(l => l.level == 1),
                 selected_faculty: this.$store.getters['state/user'].methodist.faculty_id,
                 selected_speciality: null,
                 selected_sub_faculty: null,
@@ -208,7 +206,7 @@
                 selected_season: null,
                 selected_academic_year: null,
                 selected_name: null,
-                selected_level: null,
+                selected_level: 1,
                 schedule_code: null,
                 sub_faculty_type: ScheduleType.SUBFACULTY,
                 seasons: this.$store.getters['university/seasons'],
@@ -220,6 +218,9 @@
             }
         },
         computed: {
+            yearsByLevel: function () {
+                return this.$store.getters['university/levels'].filter(l => l.level == this.selected_level);
+            },
             next_academic_year: function () {
                 return this.academic_year + 1
             },
@@ -242,14 +243,14 @@
                 return this.$store.getters['schedule/editInfo'].schedule_type
             },
             loading: function () {
-
-                console.log(this.editInfo.schedule_type);
-                console.log(this.schedule_type);
                 return (this.$store.getters['loading']);
             },
             loadingTable: function () {
                 return this.$store.getters['schedule/loadingTable'];
-            }
+            },
+            loadingSave:function () {
+                return this.$store.getters['edit/loadingSave'];
+            },
         },
         watch: {
             editInfo: function () {
@@ -263,47 +264,32 @@
                 this.schedule_code = this.editInfo.schedule_code;
             },
             selected_level: function () {
-                this.specialityFiltered;
-                this.yearsByLevel = this.$store.getters['university/levels'].filter(l => l.level == this.selected_level);
                 this.selected_speciality = null;
                 this.selected_sub_faculty = null;
+                this.$store.dispatch('edit/setSelectedLevel', this.selected_level);
             },
             selected_speciality: function () {
-                console.log("watcher");
-                let data = {
-                    "speciality": this.selected_speciality,
-                    "faculty": this.methodist.faculty_id,
-                    "level": this.selected_level,
-                    "academic_year": this.selected_academic_year,
-                    "season": this.selected_season
-                };
-                this.$store.dispatch('schedule/fetchAvailableCourses', data);
+                this.fetchAvailableCourses();
+                this.$store.dispatch('edit/setSelectedSpeciality', this.selected_speciality);
             },
             selected_sub_faculty: function () {
-                console.log("watcher");
-                let data = {
-                    "faculty": this.methodist.faculty_id,
-                    "level": this.selected_level,
-                    "academic_year": this.selected_academic_year,
-                    "season": this.selected_season
-                };
-                this.$store.dispatch('schedule/fetchAvailableCourses', data);
+                this.fetchAvailableCourses();
+                this.$store.dispatch('edit/setSelectedSubFaculty', this.selected_sub_faculty);
             },
             selected_academic_year: function () {
-                console.log("watcher");
-                let data = {
-                    "speciality": this.selected_speciality,
-                    "faculty": this.methodist.faculty_id,
-                    "level": this.selected_level,
-                    "academic_year": this.selected_academic_year,
-                    "season": this.selected_season
-                };
-                this.$store.dispatch('schedule/fetchAvailableCourses', data);
+                this.fetchAvailableCourses();
+                this.$store.dispatch('edit/setSelectedAcademicYear', this.selected_academic_year);
             },
             selected_season: function () {
-                console.log("watcher");
                 this.fetchAvailableCourses();
+                this.$store.dispatch('edit/setSelectedSeason', this.selected_season);
             },
+            selected_study_year: function () {
+                this.$store.dispatch('edit/setSelectedStudyYear', this.selected_study_year);
+            },
+            selected_name: function () {
+                this.$store.dispatch('edit/setSelectedName', this.selected_name);
+            }
         },
         methods: {
             fetchAvailableCourses: function () {
@@ -317,32 +303,20 @@
                 this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             saveSchedule: function () {
-                const data = {
-                    "selected_faculty": this.selected_faculty,
-                    "selected_speciality": this.selected_speciality,
-                    "selected_sub_faculty": this.selected_sub_faculty,
-                    "selected_level": this.selected_level,
-                    "selected_study_year": this.selected_study_year,
-                    "selected_season": this.selected_season,
-                    "selected_academic_year": this.selected_academic_year,
-                    "notes": this.notes,
-                    "schedule_type": this.schedule_type
-                };
-                console.log(data);
                 if (this.currentState == this.editState)
-                    this.$store.dispatch('editSchedule', data).then((res) => {
-                        this.$router.push('/view/' + res.code);
+                    this.$store.dispatch('edit/editSchedule').then(() => {
+                        this.$router.push('/view/' + this.editInfo.code);
                     });
                 else if (this.currentState == this.createState)
-                    this.$store.dispatch('createSchedule', data).then((res) => {
-                        this.$router.push('/view/' + res.code);
+                    this.$store.dispatch('edit/createSchedule').then(() => {
+                        this.$router.push('/view/' + this.editInfo.code);
                     });
             },
             deleteSchedule: function () {
                 this.$store.dispatch('schedule/deleteSchedule', this.editInfo.code)
                     .then(() =>
                         this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULES_ALL))
-                    .then(()=>this.$router.push("/schedules"))
+                    .then(() => this.$router.push("/schedules"))
                     .catch((err) => console.log(err));
                 return null;
             }
@@ -355,11 +329,11 @@
             this.selected_academic_year = this.editInfo.academic_year;
             this.selected_name = this.editInfo.title;
             this.selected_level = this.editInfo.level;
-            this.schedule_code = this.editInfo.schedule_code;
-            if (!this.$store.getters['state/user'].methodist && this.currentState == this.editState)
-                this.$router.push('/schedules/view/' + this.$route.params.code);
-            else if (this.$store.getters['state/currentState'] != this.currentState)
-                this.$router.push('/schedules/view/' + this.$route.params.code);
+            console.log("EDIT INFO");
+            console.log(this.editInfo);
+            this.$store.dispatch('edit/setSelectedFaculty', this.$store.getters['faculty']);
+            this.$store.dispatch('edit/setScheduleCode', this.editInfo.schedule_code);
+            this.$store.dispatch('edit/setScheduleType', this.editInfo.schedule_type);
         }
     }
 </script>

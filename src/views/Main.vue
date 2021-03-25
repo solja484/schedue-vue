@@ -14,6 +14,7 @@ import Breadcrumbs from "../components/Basic/Breadcrumbs";
 export default {
   name: "Main",
   components: { Header, Breadcrumbs }
+
 };
 </script>
 

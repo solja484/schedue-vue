@@ -12,7 +12,7 @@
     export default {
         name: "ScheduleList",
         components: {ScheduleListELem},
-        props: ['type', 'faculty', 'sub_faculty', 'level'],
+        props: ['type', 'faculty', 'sub_faculty', 'level','year'],
         data() {
             return {
                 subFacultyType: ScheduleType.SUBFACULTY
@@ -31,7 +31,7 @@
                         && s.faculty_id == this.faculty && this.sub_faculty == s.subfaculty_id);
                 else
                     return this.schedules.filter(s => s.schedule_type == this.type
-                        && s.faculty_id == this.faculty && this.level == s.study_year)
+                        && s.faculty_id == this.faculty && this.level == s.level && this.year==s.study_year)
             }
         }
     }

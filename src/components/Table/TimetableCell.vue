@@ -14,7 +14,8 @@
       <span v-else class="badge practice mr-1 p-1" >Всі групи</span>
 
     </p>
-    <strong class=" p-0 m-0">{{ info.name }}</strong><br>
+    <a class="p-0 m-0 black-link" target="_blank" rel="noopener noreferrer"
+       :href="'https://my.ukma.edu.ua/course/'+info.course_cdoc">{{ info.name }}</a><br>
     <em class=" p-0 m-0 text-muted">{{info.teacher}}</em>
   </div>
 </template>
@@ -46,4 +47,8 @@ export default {
     border-color: $info-border;
   }
 
+  .black-link,.black-link:hover,.black-link:focus,.black-link:active{
+    font-weight: bold;
+    color: #000;
+  }
 </style>

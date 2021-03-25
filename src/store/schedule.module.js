@@ -27,7 +27,8 @@ const scheduleModule = {
             academic_year: currentYear,
             title: "",
             schedule_type: ScheduleType.IDLE
-        }
+        },
+        fetchingDownloadInfo: false,
     },
     getters: {
         viewInfo: state => state.viewInfo,
@@ -36,25 +37,31 @@ const scheduleModule = {
         editRows: state => state.editRows,
         availableCourses: state => state.availableCourses,
         createInfo: state => state.editInfo,
-        loadingTable: state => state.loadingTable
+        loadingTable: state => state.loadingTable,
+        fetchingDownloadInfo: state => state.fetchingDownloadInfo,
 
     },
     actions: {
         setCreateType({commit}, createType) {
             commit("setCreateType", createType);
         },
-        fetchScheduleData({commit}, code) {
+        fetchScheduleData({commit, dispatch}, code) {
             commit("setLoading", true, {root: true});
             axios
                 .get(`/api/schedule/` + code)
                 .then(res => {
                     commit("setViewInfo", res.data.schedule);
                     commit("setViewRows", res.data.courses);
+                    commit('setDownloadInfoLoading',true);
+                    dispatch('download/setDownloadInfo', res.data, {root: true})
+                        .then(  commit('setDownloadInfoLoading',false));
                 })
                 .catch(error =>
                     console.log(error))
-                .finally(() =>
-                    commit("setLoading", false, {root: true}));
+                .finally(() => {
+                    commit("setLoading", false, {root: true});
+                });
+
         },
         setEditScheduleData({state, commit, dispatch}) {
             let data = {
@@ -101,33 +108,10 @@ const scheduleModule = {
                     commit("setTableLoading", false);
                 });
         },
-
-        editSchedule({commit}, code) {
-            commit("setLoading", true, {root: true});
-            axios
-                .post(`/api/schedule/edit` + code, code)
-                .then(res => {
-                    commit("editSchedule", res.data);
-                })
-                .catch(error => console.log(error))
-                .finally(() =>
-                    commit("setLoading", false, {root: true}));
-        },
-        createSchedule({commit}, data) {
-            commit("setLoading", true, {root: true});
-            axios
-                .post(`/api/schedule/new`, data)
-                .then(res => {
-                    commit("addSchedule", res.data);
-                })
-                .catch(error => console.log(error))
-                .finally(() =>
-                    commit("setLoading", false, {root: true}));
-        },
         deleteSchedule({commit}, code) {
             commit("setLoading", true, {root: true});
             axios
-                .post(`/api/schedule/delete`,{code:code})
+                .post(`/api/schedule/delete`, {code: code})
                 .then(res => {
                     console.log(res);
                     commit("deleteSchedule");
@@ -142,27 +126,20 @@ const scheduleModule = {
             console.log("SET CREATE TYPE " + createType);
             state.editInfo.schedule_type = createType;
         },
-        setViewInfo
-            (state, data) {
+        setViewInfo(state, data) {
             state.viewInfo = data;
             console.log("schedule info");
             console.log(state.viewInfo);
         },
         setViewRows(state, data) {
             state.viewRows = data;
-            console.log("schedule rows");
             console.log(state.viewRows);
         },
         setScheduleInfoEditable(state) {
-            console.log("viewInfo");
-            console.log(state.viewInfo);
             state.editInfo = state.viewInfo;
             state.editRows = state.viewRows;
         },
         setCreateScheduleData(state, data) {
-            console.log("New code below");
-            console.log(data.code);
-
             state.editInfo = state.emptyInfo;
             state.editInfo.schedule_code = data.code;
             state.editInfo.schedule_type = data.type;
@@ -174,6 +151,9 @@ const scheduleModule = {
         },
         setTableLoading(state, load) {
             state.loadingTable = load;
+        },
+        setDownloadInfoLoading(state, load) {
+            state.fetchingDownloadInfo = load;
         },
         deleteSchedule(state) {
             state.viewInfo = {};

@@ -1,8 +1,8 @@
 <template>
-        <thead v-if="!loading">
+        <thead v-if="!loading" :id="'head'+code">
         <tr class="text-center table-header">
             <th style="width: 2%!important;">День</th>
-            <th style="width: 7%;">Час</th>
+            <th style="width: 100px!important;">Час</th>
             <th style="width: 3%;" v-if="currentState==createState||currentState==editState"></th>
             <th style="width: 40%;">Дисципліна</th>
             <th>Викладач</th>
@@ -22,6 +22,13 @@ import {CurrentState} from "../../models/entities/CurrentState";
     export default {
         name: "TableHead",
         props: ["schedule_type", "code"],
+        update(){
+            let table = document.getElementById('head' + this.code);
+            const HtmlTableToJson = require('html-table-to-json');
+            const jsonTables = HtmlTableToJson.parse('<table><thead>' + table.innerHTML.toString() + '</thead></table>');
+            console.log(jsonTables.headers[0]);
+
+        },
         data() {
             return {
                 session_type: ScheduleType.SESSION,

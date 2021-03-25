@@ -1,15 +1,16 @@
 import {Role} from "../models/entities/Role";
 import {CurrentState} from "../models/entities/CurrentState";
 import {breadcrumbs} from "../assets/data/breadcrumbs";
-import {student_hardcoded} from "../assets/data/user_hardcoded";
+import {methodist_hardcoded,student_hardcoded} from "../assets/data/user_hardcoded";
 import axios from "axios";
 
 const stateModule = {
     namespaced: true,
     state: {
         auth: true,
-        user: student_hardcoded,
-        role: Role.STUDENT,
+        user: methodist_hardcoded,
+        user2:student_hardcoded,
+        role: Role.METHODIST,
         currentState: CurrentState.MAIN,
         breadcrumbs: breadcrumbs,
     },
@@ -45,7 +46,6 @@ const stateModule = {
                 .catch(error => console.log(error))
                 .finally(() =>
                     commit("setLoading", false));
-
         },
     },
     mutations: {

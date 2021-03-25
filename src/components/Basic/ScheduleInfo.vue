@@ -1,9 +1,16 @@
 <template>
     <div v-if="!loading">
-        <button class="btn btn-info btn-lg float-right mx-5 info-button" @click="download">
-            <i class="fa fa-download"></i> Завантажити
-        </button>
-        <Title :message="schedule.title" :additional="add"></Title>
+        <vue-excel-xlsx
+                v-if="!loadingD"
+                :columns="headers"
+                :data="rows"
+                :filename="filename"
+                sheetname="Аркуш 1"
+                class="btn btn-lg btn-info text-white info-button float-right mx-5">
+            <i class="fa fa-download"></i>
+            Завантажити
+        </vue-excel-xlsx>
+        <Title :message="title" :additional="add"></Title>
         <div v-if="user.methodist">
             <a class="black-link mx-5 px-5 text-16"
                v-if="schedule.faculty_id==user.methodist.faculty_id" @click="editSchedule">Редагувати</a></div>
@@ -31,7 +38,8 @@
             </div>
         </div>
         <div class="px-5 mt-3">
-            <ViewTable :schedule_type="schedule.schedule_type" :code="schedule.code" :currentState="currentState"></ViewTable>
+            <ViewTable :schedule_type="schedule.schedule_type" :code="schedule.code"
+                       :currentState="currentState"></ViewTable>
         </div>
     </div>
 </template>
@@ -45,22 +53,28 @@
     export default {
         name: "ScheduleInfo",
         components: {ViewTable, Title},
-        props:['currentState'],
+        props: ['currentState'],
         data() {
             return {
-                seasons: this.$store.getters['university/seasons'],
                 user: this.$store.getters['state/user'],
                 userRole: this.$store.getters['state/userRole'],
                 methodist: Role.METHODIST
             }
         },
         computed: {
+            title: function () {
+                if (!this.schedule)
+                    return "";
+                return this.schedule.title;
+            },
+            seasons: function () {
+                return this.$store.getters['university/seasons'];
+            },
             add: function () {
-                if (!this.loading) {
-                    const season = this.seasons.find(l => l.number == this.schedule.season);
+                const season = this.seasons.find(l => l.number == this.schedule.season);
+                if (season)
                     return season.title + " " + this.schedule.academic_year;
-                }
-                return "";
+                return "" + this.schedule.academic_year;
             },
             studyYear: function () {
                 if (this.schedule.level == 1) return this.schedule.study_year;
@@ -74,6 +88,29 @@
             },
             loading: function () {
                 return this.$store.getters['loading'];
+            },
+            loadingD: function () {
+                return this.$store.getters['schedule/loadingTable'] || this.$store.getters['loading']
+                    || this.$store.getters['schedule/fetchingDownloadInfo'];
+            },
+            headers: function () {
+                return this.$store.getters['download/headers'];
+            },
+            rows: function () {
+                return this.$store.getters['download/rows'];
+            },
+            filename: function () {
+                return this.$store.getters['download/filename'];
+            },
+            getData: function () {
+                let table = document.getElementById('schedule-' + this.code);
+                const HtmlTableToJson = require('html-table-to-json');
+                const jsonTables = HtmlTableToJson.parse('<table>' + table.innerHTML.toString() + '</table>');
+                let data = jsonTables.results[0];
+                let head = jsonTables.headers[0];
+                console.log(head);
+                console.log(data);
+                return data;
             }
         },
         mounted() {
@@ -82,21 +119,26 @@
         methods: {
             editSchedule: function () {
                 this.$store.dispatch('schedule/setEditScheduleData')
-                    .then(()=>{
-                this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_EDIT);
+                    .then(() => {
+                        this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_EDIT);
                         this.$router.push(`/schedules/edit/` + this.schedule.code);
                     });
             },
-            download: function () {
-                //TODO
-                alert("trying to download a table");
+            saveSchedule: function () {
+                let filename = this.$store.getters['download/filename'];
+                alert(filename);
             }
         }
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     @import "../../assets/scss/_variables.scss";
+
+    .info-button {
+        background: $info !important;
+        border-color: $info-border !important;
+    }
 
     .black-link, .black-link:hover, .black-link:focus, .black-link:active {
         color: black;
@@ -107,8 +149,5 @@
         font-size: 16px;
     }
 
-    .info-button {
-        background: $info !important;
-        border-color: $info-border !important;
-    }
+
 </style>

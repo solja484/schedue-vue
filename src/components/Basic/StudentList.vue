@@ -2,7 +2,9 @@
     <div v-if="!loading" class="mx-5 mb-5">
         <Title  message="Розклад" :additional="additional" class="text-center"></Title>
         <Timetable type="courses" ></Timetable>
+        <div v-if="showDetails">
         <CourseDetails v-for="item in schedule" :key="item.id" :item="item"></CourseDetails>
+        </div>
         <Title message="Розклад сесії" :additional="additional" class="text-center pt-5"></Title>
         <p  class="alert alert-primary text-center" v-if="!loadingSessionTable && session.length==0">
             Розклад сесії поки недоступний
@@ -23,6 +25,11 @@
             Timetable,
             Title,
             CourseDetails
+        },
+        data(){
+         return {
+             showDetails:false
+         }
         },
         computed: {
             loading: function () {
@@ -56,7 +63,7 @@
             this.$store.dispatch('university/fetchPairs');
             this.$store.dispatch('university/fetchFaculties');
             this.$store.dispatch('university/fetchSubFaculties');
-
+            setTimeout(() => this.showDetails = true, 15000);
         }
     };
 </script>

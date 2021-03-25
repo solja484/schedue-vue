@@ -5,7 +5,8 @@
     <tr v-else>
         <td v-if="row.name" class="py-2 bold text-middle-left">
             <span class="badge badge-secondary mr-1">{{row.course_code}}</span>
-            <a :href="'https://my.ukma.edu.ua/course/'+row.course_code" class="link-black ml-1">{{row.name}}</a>
+            <a :href="'https://my.ukma.edu.ua/course/'+row.course_code" class="link-black ml-1"
+               target="_blank" rel="noopener noreferrer">{{row.name}}</a>
         </td>
         <td v-else class="py-4"></td>
         <td class="py-2 italic text-middle-left">{{row.teacher}}</td>
