@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
+    "excellentexport": "^3.6.0",
     "html-table-to-json": "^1.0.0",
     "pdfmake": "^0.1.70",
     "table-to-object": "^1.0.2",

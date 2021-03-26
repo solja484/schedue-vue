@@ -72,6 +72,7 @@
     import {ScheduleType} from "../../models/entities/ScheduleType";
     import {CurrentState} from "../../models/entities/CurrentState";
     import Autocomplete from '@trevoreyre/autocomplete-vue';
+
     export default {
         name: "EditableTableRow",
         components: {BFormInput, BFormSelect, BFormSelectOption, Autocomplete},
@@ -79,8 +80,8 @@
         data() {
             return {
                 currentState: this.$store.getters['state/currentState'],
-                editState:CurrentState.SCHEDULE_EDIT,
-                createState:CurrentState.SCHEDULE_CREATE,
+                editState: CurrentState.SCHEDULE_EDIT,
+                createState: CurrentState.SCHEDULE_CREATE,
                 session_type: ScheduleType.SESSION,
                 course_name: this.row.name,
                 course_code: this.row.course_code,
@@ -91,8 +92,7 @@
                 course_group: this.row.group,
                 exam_types: examination,
                 groups: [this.row.group],
-                focused:false,
-
+                focused: false,
             }
         },
         computed: {
@@ -100,10 +100,10 @@
                 return this.$store.getters['schedule/availableCourses'];
             },
             default_value: function () {
-                if(this.row.name.length==0) return "";
-                    return this.row.course_code+" "+this.row.name;
-                }
-            },
+                if (this.row.name.length == 0) return "";
+                return this.row.course_code + " " + this.row.name;
+            }
+        },
         methods: {
             getCourseGroup: function () {
                 if (this.row.group == 0) return 'Лекція';
@@ -122,9 +122,23 @@
             onSubmit: function (result) {
                 this.course_code = result.course_code;
                 this.course_name = result.name;
+                this.$store.dispatch('edit/changeRow',this.getRow());
             },
             getResultValue: function (result) {
                 return result.course_code + " " + result.name;
+            },
+            getRow:function(){
+                return { "id": this.row.id,
+                    "course_code": this.course_code,
+                    "group": this.course_group,
+                    "day_id": this.row.day_id,
+                    "pair_id": this.row.pair_id,
+                    "weeks": this.course_weeks,
+                    "classroom": this.course_room,
+                    "name": this.course_name,
+                    "teacher": this.course_teacher,
+                    "exam_type": this.course_exam,
+                    "row_num": this.row.row_num };
             }
         },
         watch: {
@@ -133,14 +147,35 @@
                 let course = this.courses.find(course => course.course_code == this.course_code);
                 for (let i = 0; i <= course.actual_group; i++) res.push(i);
                 this.groups = res;
+            },
+            course_teacher: function () {
+                this.$store.dispatch('edit/changeRow',this.getRow());
+            },
+            course_weeks: function () {
+                this.$store.dispatch('edit/changeRow',this.getRow());
+            },
+            course_exam: function () {
+                this.$store.dispatch('edit/changeRow',this.getRow());
+            },
+            course_room: function () {
+                this.$store.dispatch('edit/changeRow',this.getRow());
+            },
+            course_group: function () {
+                this.$store.dispatch('edit/changeRow',this.getRow());
             }
+        },
+        mounted() {
+            if (!this.row.rowspan)
+                if (this.row.course_code!="" && this.row.name!="") {
+                 this.$store.dispatch('edit/addRow', this.row);
+               }
+
         }
     }
 </script>
 
 <style scoped>
     @import '../../assets/scss/autocomplete.css';
-
 
 
     .autocomplete-result-list li {

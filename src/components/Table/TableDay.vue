@@ -63,6 +63,7 @@
                             counter++;
                             if (counter == 1)
                                 result.push({"rowspan": this.rowspan_pair(i), "time": this.pair_time(i)});
+                            course['row_num']=counter;
                             result.push(course);
                         }
                     }
@@ -73,9 +74,11 @@
                             "course_code": "",
                             "group": 100,
                             "pair_id": i,
+                            "day_id":this.day.id,
                             "weeks": "",
                             "classroom": "",
-                            "teacher": ""
+                            "teacher": "",
+                            "row_num":1
                         };
                         result.push({
                             "rowspan": 2,

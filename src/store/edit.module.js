@@ -13,19 +13,21 @@ const editModule = {
         selected_level: 1,
         schedule_code: null,
         loadingSave: false,
-        schedule_type:null
+        schedule_type: null,
+        editTable: []
     },
     getters: {
         loadingSave: state => state.loadingSave,
         selected_speciality: state => state.selected_speciality,
         selected_sub_faculty: state => state.selected_sub_faculty,
+        editTable: state => state.editTable
     },
     actions: {
         setSelectedFaculty({commit}, faculty) {
             commit("setSelectedFaculty", faculty);
         },
-        setScheduleType({commit},type){
-          commit("setScheduleType",type);
+        setScheduleType({commit}, type) {
+            commit("setScheduleType", type);
         },
         setSelectedSpeciality({commit}, speciality) {
             commit("setSelectedSpeciality", speciality);
@@ -54,6 +56,17 @@ const editModule = {
         },
         setLoadingSave({commit}, load) {
             commit("setLoadingSave", load);
+        },
+        clearTable({commit}) {
+            commit("clearTable");
+        },
+        addRow({commit}, row) {
+            commit("addTableRow", row);
+        },
+        changeRow({commit}, row) {
+            console.log("ROW TO CHANGE");
+            console.log(row);
+            commit("changeTableRow", row);
         },
         editSchedule({state, commit}) {
             commit("setLoading", true, {root: true});
@@ -110,11 +123,24 @@ const editModule = {
         setScheduleCode(state, code) {
             state.schedule_code = code;
         },
-        setScheduleType(state,type){
-            state.schedule_type=type;
+        setScheduleType(state, type) {
+            state.schedule_type = type;
         },
         setLoadingSave(state, load) {
             state.loadingSave = load;
+        },
+        addTableRow(state, row) {
+            state.editTable.push(row);
+        },
+        changeTableRow(state, row) {
+            let newTable = state.editTable
+                .filter(r => r.day_id != row.day_id || r.pair_id != row.pair_id || r.row_num != row.row_num);
+            newTable.push(row);
+            state.editTable = newTable;
+        },
+        clearTable(state) {
+            console.log("CLEAR");
+            state.editTable = [];
         },
         clearFields(state) {
             state.selected_faculty = null;
@@ -126,6 +152,7 @@ const editModule = {
             state.selected_name = null;
             state.selected_level = 1;
             state.schedule_code = null;
+            state.editTable = [];
         }
     }
 };

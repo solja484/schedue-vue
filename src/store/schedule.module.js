@@ -52,9 +52,9 @@ const scheduleModule = {
                 .then(res => {
                     commit("setViewInfo", res.data.schedule);
                     commit("setViewRows", res.data.courses);
-                    commit('setDownloadInfoLoading',true);
+                    commit('setDownloadInfoLoading', true);
                     dispatch('download/setDownloadInfo', res.data, {root: true})
-                        .then(  commit('setDownloadInfoLoading',false));
+                        .then(commit('setDownloadInfoLoading', false));
                 })
                 .catch(error =>
                     console.log(error))
@@ -72,22 +72,26 @@ const scheduleModule = {
                 "season": state.viewInfo.season
             };
             commit("setLoading", true, {root: true});
+            dispatch('edit/clearTable', {}, {root: "true"});
             dispatch('fetchAvailableCourses', data)
-                .then(() =>
-                    commit("setScheduleInfoEditable"))
+                .then(() => {
+                    commit("setScheduleInfoEditable");
+                })
                 .catch(error =>
                     console.log(error))
                 .finally(() =>
                     commit("setLoading", false, {root: true}));
 
         },
-        setCreateScheduleData({commit}, type) {
+        setCreateScheduleData({commit, dispatch}, type) {
             commit("setLoading", true, {root: true});
             console.log("set create schedule data");
             axios
                 .get('/api/schedule_new_code')
-                .then(res =>
-                    commit("setCreateScheduleData", {code: res.data, type: type}))
+                .then(res => {
+                    commit("setCreateScheduleData", {code: res.data, type: type});
+                    dispatch('edit/clearTable', {}, {root: "true"});
+                })
                 .catch(error =>
                     console.log(error))
                 .finally(() =>
@@ -99,8 +103,9 @@ const scheduleModule = {
             axios.get('/api/courses', {
                 params: data
             })
-                .then(res =>
-                    commit("setAvailableCourses", res.data))
+                .then(res => {
+                    commit("setAvailableCourses", res.data);
+                })
                 .catch(error =>
                     console.log(error))
                 .finally(() => {

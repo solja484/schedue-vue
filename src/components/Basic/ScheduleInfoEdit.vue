@@ -1,8 +1,10 @@
 <template>
     <div v-if="!loading">
-        <!--button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
-                :disabled="selected_speciality==null&&selected_sub_faculty==null"><i class="fa fa-save"></i> Зберегти
-        </button-->
+        <button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
+                :disabled="selected_speciality==null&&selected_sub_faculty==null">
+            <i class="fa fa-spinner fa-pulse fa-fw" v-if="loadingSave"></i>
+            <i class="fa fa-save" v-else></i> Зберегти
+        </button>
         <Title v-if="currentState==createState" message="Новий розклад"></Title>
         <Title v-else-if="currentState==editState" message="Редагування розкладу" additional=""></Title>
         <div class="container mx-5">
@@ -81,6 +83,7 @@
             <ViewTable :schedule_type="schedule_type"
                        :code="schedule_code"
                        :currentState="currentState"
+                       :id="'viewschedule-'+schedule_code"
                        :disable="selected_speciality==null&&selected_sub_faculty==null"></ViewTable>
         </div>
         <div v-else class="px-5 mt-3">
@@ -214,7 +217,8 @@
                     {text: 'Бакалаврська', value: 1},
                     {text: 'Магістерська', value: 2}
                 ],
-                courses: this.$store.getters['schedule/availableCourses']
+                courses: this.$store.getters['schedule/availableCourses'],
+                loadingSave:false
             }
         },
         computed: {
@@ -247,10 +251,7 @@
             },
             loadingTable: function () {
                 return this.$store.getters['schedule/loadingTable'];
-            },
-            loadingSave:function () {
-                return this.$store.getters['edit/loadingSave'];
-            },
+            }
         },
         watch: {
             editInfo: function () {
@@ -303,13 +304,16 @@
                 this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             saveSchedule: function () {
+                this.loadingSave=true;
                 if (this.currentState == this.editState)
                     this.$store.dispatch('edit/editSchedule').then(() => {
-                        this.$router.push('/view/' + this.editInfo.code);
+                        this.loadingSave=false;
+                        this.$router.push('/schedules/view/' + this.editInfo.code);
                     });
                 else if (this.currentState == this.createState)
                     this.$store.dispatch('edit/createSchedule').then(() => {
-                        this.$router.push('/view/' + this.editInfo.code);
+                        this.loadingSave=false;
+                        this.$router.push('/schedules/view/' + this.editInfo.code);
                     });
             },
             deleteSchedule: function () {
@@ -332,7 +336,7 @@
             console.log("EDIT INFO");
             console.log(this.editInfo);
             this.$store.dispatch('edit/setSelectedFaculty', this.$store.getters['faculty']);
-            this.$store.dispatch('edit/setScheduleCode', this.editInfo.schedule_code);
+            this.$store.dispatch('edit/setScheduleCode', this.editInfo.code);
             this.$store.dispatch('edit/setScheduleType', this.editInfo.schedule_type);
         }
     }
