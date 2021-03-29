@@ -26,10 +26,12 @@
             return {
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
-                days: this.$store.getters['university/days'],
             }
         },
         computed: {
+            days: function () {
+                return this.$store.getters["university/days"]
+            },
             selected_speciality: function () {
                 return this.$store.getters['edit/selected_speciality']
             },

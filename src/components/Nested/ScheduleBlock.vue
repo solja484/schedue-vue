@@ -51,15 +51,22 @@
     export default {
         name: "ScheduleBlock",
         components: {ScheduleList, BCollapse},
-        data() {
-            return {
-                faculties: this.$store.getters["university/faculties"],
-                sub_faculty: this.$store.getters["university/sub_faculty"],
-                speciality: this.$store.getters["university/speciality"],
-                levels: this.$store.getters["university/levels"]
-            };
-        },
-        props: ["type"]
+        props: ["type"],
+        computed:{
+            faculties: function () {
+                return this.$store.getters["university/faculties"];
+            },
+            sub_faculty: function () {
+                return this.$store.getters["university/sub_faculty"];
+            },
+            speciality: function () {
+                return this.$store.getters["university/speciality"];
+            },
+            levels: function () {
+                return this.$store.getters["university/levels"];
+            },
+        }
+
     };
 </script>
 

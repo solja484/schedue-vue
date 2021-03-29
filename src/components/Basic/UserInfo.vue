@@ -3,20 +3,16 @@
         <p class="my-0"><b>Користувач</b><br>
        {{ user.name }}<br>
         <b>Роль</b><br>
-       {{ user.role }}<br>
-       <b>Етап</b><br>
-       Презентації курсів</p>
+       {{ user.role }}</p>
     </div>
 </template>
 
 <script>
     export default {
         name: "UserInfo",
-        data() {
-            return {
-                user: this.$store.getters["state/user"]
-            };
-        },
+        computed:{
+            user: function(){return this.$store.getters["state/user"]}
+        }
     }
 </script>
 

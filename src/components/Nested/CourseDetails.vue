@@ -39,18 +39,9 @@
         props: ['item'],
         data() {
             return {
-                reg_type: [{
-                    name: "mandat",
-                    translate: "Нормативна"
-                },
-                    {
-                        name: "zfree",
-                        translate: "Вільного вибору"
-                    },
-                    {
-                        name: "option",
-                        translate: "Професійно-орієнтована"
-                    }]
+                reg_type: [{name: "mandat", translate: "Нормативна"},
+                    {name: "zfree", translate: "Вільного вибору"},
+                    {name: "option", translate: "Професійно-орієнтована"}]
             }
         },
         computed: {

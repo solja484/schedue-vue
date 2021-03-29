@@ -15,33 +15,18 @@
         name: "TimetableRow",
         components: {TimetableCell},
         props: ["pair", "type"],
-        data() {
-            return {
-                days: this.$store.getters["university/days"],
-                pairs: this.$store.getters["university/pairs"],
-            };
-        },
         computed: {
+            days: function () {
+                return this.$store.getters["university/days"]
+            },
+            pairs: function () {
+                return this.$store.getters["university/pairs"]
+            },
             schedule: function () {
                 return this.$store.getters['student/schedule'].filter(sch => sch.pair_id == this.pair.id);
             },
             session: function () {
                 return this.$store.getters['student/session'].filter(sch => sch.pair_id == this.pair.id);
-            },
-            getRowspanAll: function () {
-                return this.coursesPerCell.reduce(function (a, b) {
-                    return Math.max(a, b);
-                });
-            },
-            coursesPerCell: function () {
-                let courses = [];
-                for (let day of this.days)
-                    if (this.type == 'session')
-                        courses[day.number] = this.session.filter(sch => sch.day_id == day.id).length;
-                    else
-                        courses[day.number] = this.schedule.filter(sch => sch.day_id == day.id).length;
-                console.log(courses);
-                return courses;
             }
         },
         methods: {
@@ -51,7 +36,6 @@
                 else
                     return this.schedule.filter(sch => sch.day_id == day_id);
             },
-
         }
 
     }

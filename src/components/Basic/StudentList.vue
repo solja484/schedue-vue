@@ -68,9 +68,3 @@
     };
 </script>
 
-<style scoped>
-
-    .space{
-        height:50px;
-    }
-</style>

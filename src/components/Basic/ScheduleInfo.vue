@@ -101,16 +101,6 @@
             },
             filename: function () {
                 return this.$store.getters['download/filename'];
-            },
-            getData: function () {
-                let table = document.getElementById('schedule-' + this.code);
-                const HtmlTableToJson = require('html-table-to-json');
-                const jsonTables = HtmlTableToJson.parse('<table>' + table.innerHTML.toString() + '</table>');
-                let data = jsonTables.results[0];
-                let head = jsonTables.headers[0];
-                console.log(head);
-                console.log(data);
-                return data;
             }
         },
         mounted() {

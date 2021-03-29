@@ -22,13 +22,6 @@ import {CurrentState} from "../../models/entities/CurrentState";
     export default {
         name: "TableHead",
         props: ["schedule_type", "code"],
-        update(){
-            let table = document.getElementById('head' + this.code);
-            const HtmlTableToJson = require('html-table-to-json');
-            const jsonTables = HtmlTableToJson.parse('<table><thead>' + table.innerHTML.toString() + '</thead></table>');
-            console.log(jsonTables.headers[0]);
-
-        },
         data() {
             return {
                 session_type: ScheduleType.SESSION,

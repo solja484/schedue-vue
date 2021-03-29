@@ -3,10 +3,11 @@
               type="dark"
               class="header px-5 text-14"
               v-if="state != authState">
-        <b-navbar-brand class=" align-bottom " href="#">
+        <b-navbar-brand  href="/">
             <img src="../../assets/KMA-logo-white.png"
                  alt="kma logo"
                  class="kma-brand"/>
+
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
@@ -71,15 +72,18 @@
         },
         data() {
             return {
-                auth: this.$store.getters["state/auth"],
-                state: this.$store.getters["state/currentState"],
-                userRole: this.$store.getters["state/role"],
-                user: this.$store.getters["state/user"],
+
                 guest: Role.GUEST,
                 authState: CurrentState.AUTH,
                 profileState: CurrentState.USER_PROFILE,
                 schedulesState: CurrentState.SCHEDULES_ALL
             };
+        },
+        computed:{
+            auth: function(){ return  this.$store.getters["state/auth"]},
+            state: function(){ return  this.$store.getters["state/currentState"]},
+            userRole: function(){ return  this.$store.getters["state/role"]},
+            user: function(){ return  this.$store.getters["state/user"]}
         },
         methods: {
             logout: function () {
@@ -121,8 +125,17 @@
 
     .kma-brand {
         height: 30px;
+        vertical-align: bottom!important;
+    }
+    .align-bottom{
+        vertical-align: bottom!important;
     }
 
+    .brand{
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 0;
+    }
     .text-14 {
         font-size: 14px;
     }

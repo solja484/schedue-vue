@@ -5,8 +5,10 @@
             <i class="fa fa-spinner fa-pulse fa-fw" v-if="loadingSave"></i>
             <i class="fa fa-save" v-else></i> Зберегти
         </button>
-        <Title v-if="currentState==createState" message="Новий розклад"></Title>
-        <Title v-else-if="currentState==editState" message="Редагування розкладу" additional=""></Title>
+        <Title v-if="currentState==createState" message="Новий розклад "
+               :additional="editInfo.code"></Title>
+        <Title v-else-if="currentState==editState" message="Редагування розкладу "
+               :additional="editInfo.code"></Title>
         <div class="container mx-5">
             <div class="row">
                 <strong class="col-sm-2 text-right text-14">Факультет</strong>

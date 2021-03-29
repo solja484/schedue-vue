@@ -30,16 +30,18 @@
     export default {
         name: "TableDay",
         components: {TableRow, EditableTableRow},
-        props: ["day", "schedule_type", 'disable','currentState'],
+        props: ["day", "schedule_type", 'disable', 'currentState'],
         data() {
             return {
-                pairs: this.$store.getters['university/pairs'],
                 session_type: ScheduleType.SESSION,
                 viewState: CurrentState.SCHEDULE_VIEW,
                 editState: CurrentState.SCHEDULE_EDIT
             }
         },
         computed: {
+            pairs: function () {
+                return this.$store.getters['university/pairs']
+            },
             courses: function () {
                 if (this.currentState == CurrentState.SCHEDULE_VIEW)
                     return this.$store.getters['schedule/viewRows'].filter(c => c.day_id == this.day.id);
@@ -63,22 +65,22 @@
                             counter++;
                             if (counter == 1)
                                 result.push({"rowspan": this.rowspan_pair(i), "time": this.pair_time(i)});
-                            course['row_num']=counter;
+                            course['row_num'] = counter;
                             result.push(course);
                         }
                     }
                     if (counter == 0) {
                         let empty = {
                             "id": i,
-                            "name":"",
+                            "name": "",
                             "course_code": "",
                             "group": 100,
                             "pair_id": i,
-                            "day_id":this.day.id,
+                            "day_id": this.day.id,
                             "weeks": "",
                             "classroom": "",
                             "teacher": "",
-                            "row_num":1
+                            "row_num": 1
                         };
                         result.push({
                             "rowspan": 2,

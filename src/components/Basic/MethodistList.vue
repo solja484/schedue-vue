@@ -11,23 +11,6 @@
             <div v-for="block in scheduleBlocks" :key="block.type">
                 <MethodistListElem :type="block.type" :title="block.title"></MethodistListElem>
             </div>
-            <!--Title message="Розклади кафедри" additional=""></Title>
-            <div v-for="s in getSchedulesByType(sub_faculty)" :key="s.id" class="">
-                <b-icon-eye-slash v-if="s.draft==1" class="text-muted text-28 m-2 float-left" title="Розклад НЕ доступний для студентів"></b-icon-eye-slash>
-                <b-icon-eye v-else class="text-blue text-28  m-2 float-left" title="Розклад доступний для студентів"></b-icon-eye>
-                <BSkeleton type="input" class="mx-5 my-2" v-if="loadingElem && loadingElemId==s.id"></BSkeleton>
-                <ScheduleListELem class="mx-5" v-else
-                                  :code="s.code" :title="s.title"></ScheduleListELem>
-            </div>
-            <Title message="Розклади сесії" additional=""></Title>
-            <div v-for="s in getSchedulesByType(session)" :key="s.id" class="">
-                <b-icon-eye-slash v-if="s.draft==1" class="text-muted text-28 m-2 float-left" title="Розклад НЕ доступний для студентів"></b-icon-eye-slash>
-                <b-icon-eye v-else class="text-blue text-28  m-2 float-left" title="Розклад доступний для студентів"></b-icon-eye>
-                <BSkeleton type="input" class="mx-5 my-2" v-if="loadingElem && loadingElemId==s.id"></BSkeleton>
-                <ScheduleListELem class="mx-5" v-else
-                                  :code="s.code" :title="s.title"></ScheduleListELem>
-
-            </div-->
         </div>
     </div>
 </template>
@@ -74,7 +57,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
     @import "../../assets/scss/_variables.scss";
 
     .add-schedule-button {
@@ -105,4 +88,9 @@
     }
 
 
+    .spoiler-colors {
+        color: $spoiler-text;
+        background: $spoiler-fill;
+        border-color: $spoiler-border;
+    }
 </style>

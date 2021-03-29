@@ -146,7 +146,7 @@ const scheduleModule = {
         },
         setCreateScheduleData(state, data) {
             state.editInfo = state.emptyInfo;
-            state.editInfo.schedule_code = data.code;
+            state.editInfo.code = data.code;
             state.editInfo.schedule_type = data.type;
             state.editRows = [];
             console.log(state.editInfo);

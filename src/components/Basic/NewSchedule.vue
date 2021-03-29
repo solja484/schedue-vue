@@ -45,12 +45,12 @@
         components: {Title, BFormSelect, BFormSelectOption},
         data() {
             return {
-                schedule_types: this.$store.getters['university/schedule_types'],
                 selected: null,
                 code: null
             };
         },
         computed: {
+            schedule_types: function () {return this.$store.getters['university/schedule_types']},
             loading: function () {
                 return this.$store.getters['loading'];
             }

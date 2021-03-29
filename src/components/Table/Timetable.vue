@@ -16,17 +16,20 @@
 
 <script>
     import TimetableRow from "../Table/TimetableRow";
+
     export default {
         name: "Timetable",
         components: {
             TimetableRow,
         },
-        props:["type"],
-        data() {
-            return {
-                days: this.$store.getters["university/days"],
-                pairs: this.$store.getters["university/pairs"],
-            };
+        props: ["type"],
+        computed: {
+            days: function () {
+                return this.$store.getters["university/days"]
+            },
+            pairs: function () {
+                return this.$store.getters["university/pairs"]
+            }
         },
     }
 </script>

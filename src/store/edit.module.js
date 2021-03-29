@@ -70,6 +70,7 @@ const editModule = {
         },
         editSchedule({state, commit}) {
             commit("setLoading", true, {root: true});
+            console.log("EDIT SCHEDULE POST DATA");
             console.log(state);
             axios
                 .post(`/api/schedule/edit`, state)
@@ -83,6 +84,7 @@ const editModule = {
         },
         createSchedule({commit, state}) {
             commit("setLoading", true, {root: true});
+            console.log("CREATE SCHEDULE POST DATA");
             console.log(state);
             axios
                 .post(`/api/schedule/create`, state)
