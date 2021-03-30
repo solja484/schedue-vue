@@ -67,7 +67,7 @@
 </template>
 
 <script>
-    import {examination} from "../../assets/data/levels"
+    import {examination} from "../../assets/data/static"
     import {BFormInput, BFormSelect, BFormSelectOption} from "bootstrap-vue"
     import {ScheduleType} from "../../models/entities/ScheduleType";
     import {CurrentState} from "../../models/entities/CurrentState";

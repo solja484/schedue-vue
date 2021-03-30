@@ -4,8 +4,9 @@
             <th style="width: 2%!important;">День</th>
             <th style="width: 100px!important;">Час</th>
             <th style="width: 3%;" v-if="currentState==createState||currentState==editState"></th>
-            <th style="width: 40%;">Дисципліна</th>
-            <th>Викладач</th>
+            <th v-if="currentState==viewState">Дисципліна, викладач</th>
+            <th style="width: 40%;" v-if="currentState!=viewState">Дисципліна</th>
+            <th v-if="currentState!=viewState">Викладач</th>
             <th style="width: 10%;" v-if="schedule_type==session_type">Вид контролю</th>
             <th style="width: 7%;">Група</th>
             <th style="width: 7%;" v-if="schedule_type!=session_type">Тижні</th>
@@ -27,7 +28,8 @@ import {CurrentState} from "../../models/entities/CurrentState";
                 session_type: ScheduleType.SESSION,
                 currentState:this.$store.getters['state/currentState'],
                 createState:CurrentState.SCHEDULE_CREATE,
-                editState:CurrentState.SCHEDULE_EDIT
+                editState:CurrentState.SCHEDULE_EDIT,
+                viewState: CurrentState.SCHEDULE_VIEW
             }
         },
         computed: {

@@ -1,4 +1,4 @@
-import {levels, seasons} from "../assets/data/levels";
+import {levels, seasons, days, pairs} from "../assets/data/static";
 import {schedule_types} from "../assets/data/schedule_types";
 import axios from "axios";
 
@@ -9,8 +9,8 @@ const universityModule = {
         faculties: [],
         speciality: [],
         sub_faculty: [],
-        days: [],
-        pairs: [],
+        days: days,
+        pairs: pairs,
         levels: levels,
         seasons: seasons,
         academic_year: 2020,
@@ -65,47 +65,16 @@ const universityModule = {
                 .finally(() =>
                     commit("setLoading", false, {root: true}));
         },
-        fetchDays({commit}) {
-            commit("setLoading", true, {root: true});
-            axios
-                .get(`/api/days`)
-                .then(res =>
-                    commit("setDays", res.data))
-                .catch(error => console.log(error))
-                .finally(() =>
-                    commit("setLoading", false, {root: true}));
-        },
-        fetchPairs({commit}) {
-            commit("setLoading", true, {root: true});
-            axios
-                .get(`/api/pairs`)
-                .then(res =>
-                    commit("setPairs", res.data))
-                .catch(error => console.log(error))
-                .finally(() =>
-                    commit("setLoading", false, {root: true}));
-        }
     },
     mutations: {
         setFaculties(state, data) {
             state.faculties = data;
-            //data.forEach(d => state.faculties.push(d));
         },
         setSubFaculties(state, data) {
             state.sub_faculty = data;
-            // data.forEach(d => state.sub_faculty.push(d));
         },
         setSpeciality(state, data) {
             state.speciality = data;
-            // data.forEach(d => state.speciality.push(d));
-        },
-        setDays(state, data) {
-            state.days = data;
-            // data.forEach(d => state.university.days.push(d));
-        },
-        setPairs(state, data) {
-            state.pairs = data;
-            // data.forEach(d => state.university.pairs.push(d));
         }
     }
 

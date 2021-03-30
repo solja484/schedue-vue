@@ -91,7 +91,8 @@
                 }
                 return result;
             }
-        }, methods: {
+        },
+        methods: {
             rowspan_pair(pair_id) {
                 let rowspan = 0;
                 this.courses.forEach(function (c) {

@@ -22,8 +22,6 @@
             this.$store.dispatch("university/fetchFaculties");
             this.$store.dispatch("university/fetchSpeciality");
             this.$store.dispatch("university/fetchSubFaculties");
-            this.$store.dispatch("university/fetchDays");
-            this.$store.dispatch("university/fetchPairs");
         }
     };
 </script>

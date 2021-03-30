@@ -5,12 +5,12 @@ const downloadModule = {
         rows: [],
         filename: "",
         sessionHeaders: [{label: "День", field: "day"}, {label: "Час", field: "time"},
-            {label: "Дисципліна", field: "course"}, {label: "Викладач", field: "teacher"},
+            {label: "Дисципліна, викладач", field: "course"},
             {label: "Вид контролю", field: "exam"}, {label: "Група", field: "group"},
             {label: "Дата", field: "weeks"}, {label: "Аудиторія", field: "room"}],
 
         simpleHeaders: [{label: "День", field: "day"}, {label: "Час", field: "time"},
-            {label: "Дисципліна", field: "course"}, {label: "Викладач", field: "teacher"},
+            {label: "Дисципліна, викладач", field: "course"},
             {label: "Група", field: "group"}, {label: "Тижні", field: "weeks"}, {
                 label: "Аудиторія", field: "room"
             }]
@@ -43,8 +43,7 @@ const downloadModule = {
                     if (pair.number == 1) elem["day"] = day.name;
                     elem["time"] = pair.time;
                     if (courses.length > 0) {
-                        elem["course"] = courses[0].name;
-                        elem["teacher"] = courses[0].teacher;
+                        elem["course"] = courses[0].teacher==null ? courses[0].name :courses[0].name+" "+courses[0].teacher;
                         elem["group"] = courses[0].group=='0' ? "Лекція" : courses[0].group;
                         elem["weeks"] = courses[0].weeks;
                         if(data.type=="session") elem["exam"] = courses[0].exam_type;
@@ -54,8 +53,7 @@ const downloadModule = {
                     rows.push(elem);
                     for (let course of courses) {
                         elem = {};
-                        elem["course"] = course.name;
-                        elem["teacher"] = course.teacher;
+                        elem["course"] = course.teacher==null ? course.name :course.name+" "+ course.teacher;
                         elem["group"] = course.group=='0' ? "Лекція" : course.group;
                         elem["weeks"] = course.weeks;
                         if(data.type=="session") elem["exam"] = course.exam_type;
