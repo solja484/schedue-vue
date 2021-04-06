@@ -1,7 +1,7 @@
 <template>
     <div v-if="!loading">
         <button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
-                :disabled="selected_speciality==null&&selected_sub_faculty==null">
+                :disabled="(selected_speciality==null&&selected_sub_faculty==null)||selected_name.length==0">
             <i class="fa fa-spinner fa-pulse fa-fw" v-if="loadingSave"></i>
             <i class="fa fa-save" v-else></i> Зберегти
         </button>
@@ -199,27 +199,27 @@
                 showDeleteAlert: false,
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
+                sub_faculty_type: ScheduleType.SUBFACULTY,
                 academic_year: this.$store.getters['university/academic_year'],
                 methodist: this.$store.getters['state/user'].methodist,
                 sub_faculty_all: this.$store.getters['university/sub_faculty'],
                 speciality_all: this.$store.getters['university/speciality'],
                 faculty_all: this.$store.getters['university/faculties'],
+                seasons: this.$store.getters['university/seasons'],
+                courses: this.$store.getters['schedule/availableCourses'],
                 selected_faculty: this.$store.getters['state/user'].methodist.faculty_id,
                 selected_speciality: null,
                 selected_sub_faculty: null,
                 selected_study_year: null,
                 selected_season: null,
                 selected_academic_year: null,
-                selected_name: null,
+                selected_name: "",
                 selected_level: 1,
-                schedule_code: null,
-                sub_faculty_type: ScheduleType.SUBFACULTY,
-                seasons: this.$store.getters['university/seasons'],
+                schedule_code: this.$store.getters['schedule/editInfo'].schedule_code,
                 level_options: [
                     {text: 'Бакалаврська', value: 1},
                     {text: 'Магістерська', value: 2}
                 ],
-                courses: this.$store.getters['schedule/availableCourses'],
                 loadingSave:false
             }
         },
@@ -339,7 +339,7 @@
             console.log(this.editInfo);
             this.$store.dispatch('edit/setSelectedFaculty', this.$store.getters['faculty']);
             this.$store.dispatch('edit/setScheduleCode', this.editInfo.code);
-            this.$store.dispatch('edit/setScheduleType', this.editInfo.schedule_type);
+            this.$store.dispatch('edit/setScheduleType', this.schedule_type);
         }
     }
 </script>

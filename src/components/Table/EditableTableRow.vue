@@ -91,8 +91,8 @@
                 course_room: this.row.classroom,
                 course_group: this.row.group,
                 exam_types: examination,
-                groups: [this.row.group],
                 focused: false,
+                groups:[this.row.group]
             }
         },
         computed: {
@@ -137,7 +137,7 @@
                     "classroom": this.course_room,
                     "name": this.course_name,
                     "teacher": this.course_teacher,
-                    "exam_type": this.course_exam,
+                    "exam_type": this.course_exam?this.course_exam:null,
                     "row_num": this.row.row_num };
             }
         },
@@ -169,7 +169,9 @@
                 if (this.row.course_code!="" && this.row.name!="") {
                  this.$store.dispatch('edit/addRow', this.row);
                }
-
+            this.groups=[];
+                for(let i=0;i<=this.row.actual_group;i++)
+                    this.groups.push(i);
         }
     }
 </script>

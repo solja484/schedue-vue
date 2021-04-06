@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button :v-if="userRole==methodistRole"
+        <button v-if="userRole==methodistRole"
                 @click="newSchedule()"
                 class="btn btn-light mx-5 add-schedule-button">
             <b-icon-plus class="bigger"></b-icon-plus>
@@ -36,7 +36,7 @@
                 speciality: ScheduleType.SPECIALITY,
                 sub_faculty: ScheduleType.SUBFACULTY,
                 session: ScheduleType.SESSION,
-                userRole: this.$store.getters['state/userRole'],
+                userRole: this.$store.getters['state/role'],
                 methodistRole: Role.METHODIST
             }
         },

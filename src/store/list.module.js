@@ -16,7 +16,7 @@ const schedulesListModule = {
         fetchFinalSchedules({commit, rootGetters}) {
             commit("setLoading", true, {root: true});
             axios
-                .get(`/api/schedules`, {
+                .get(`/api/schedules/all`, {
                     params: {
                         year: rootGetters.currentYear,
                         season: rootGetters.currentSeason
@@ -33,7 +33,7 @@ const schedulesListModule = {
         fetchMethodistSchedules({commit, rootGetters}) {
             commit("setLoading", true, {root: true});
             axios
-                .get(`/api/methodist/schedules`, {
+                .get(`/api/schedules/methodist`, {
                     params: {
                         year: rootGetters.currentYear,
                         season: rootGetters.currentSeason,
@@ -64,27 +64,20 @@ const schedulesListModule = {
 
             let updatedList = state.methodist.map(item =>
             {
-                if (item.id == data.id){
-                    return {...item, draft: data.draft}; //gets everything that was already in item, and updates "done"
-                }
-                return item; // else return unmodified item
+                if (item.id == data.id)
+                    return {...item, draft: data.draft};
+                return item;
             });
-            state.methodist=updatedList; // set state to new object with updated list
+            state.methodist=updatedList;
         },
         setLoadingElem(state, load) {
             state.loadingElem = load;
         },
         setFinalSchedules(state, data) {
             state.final = data;
-            //data.forEach(d => state.finalSchedules.push(d));
-            console.log("final schedules fetch");
-            console.log(state.final);
         },
         setMethodistSchedules(state, data) {
             state.methodist = data;
-            // data.forEach(d => state.methodistSchedules.push(d));
-            console.log("methodist schedules fetch");
-            console.log(state.methodist);
         },
     }
 };

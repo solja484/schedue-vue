@@ -25,14 +25,14 @@
                 <span class="col-sm-8 " v-else-if="schedule.level==2">Магістерська</span>
             </div>
             <div class="row mb-1">
-                <strong class="col-sm-2 text-right mx-1">Рік навчання</strong>
+                <strong class="col-sm-2 text-right mx-1" v-if="schedule.schedule_type!=subfaculty">Рік навчання</strong>
                 <span class="col-sm-8 ">{{studyYear}} </span>
             </div>
-            <div class="row mb-1" v-if="schedule.subfaculty">
+            <div class="row mb-1" v-if="schedule.schedule_type==subfaculty">
                 <strong class="col-sm-2 text-right mx-1">Кафедра</strong>
                 <span class="col-sm-8 ">{{schedule.subfaculty}}</span>
             </div>
-            <div class="row mb-1" v-if="schedule.speciality">
+            <div class="row mb-1" v-else>
                 <strong class="col-sm-2 text-right mx-1">Спеціальність</strong>
                 <span class="col-sm-8 ">{{schedule.speciality}}</span>
             </div>
@@ -49,6 +49,7 @@
     import {Role} from "../../models/entities/Role";
     import {CurrentState} from "../../models/entities/CurrentState";
     import ViewTable from "../Table/ViewTable";
+    import {ScheduleType} from "../../models/entities/ScheduleType";
 
     export default {
         name: "ScheduleInfo",
@@ -58,7 +59,8 @@
             return {
                 user: this.$store.getters['state/user'],
                 userRole: this.$store.getters['state/userRole'],
-                methodist: Role.METHODIST
+                methodist: Role.METHODIST,
+                subfaculty: ScheduleType.SUBFACULTY
             }
         },
         computed: {

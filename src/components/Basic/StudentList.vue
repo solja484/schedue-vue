@@ -59,8 +59,6 @@
         mounted() {
             this.$store.dispatch('student/fetchStudentCourses');
             this.$store.dispatch('student/fetchStudentSession');
-            this.$store.dispatch('university/fetchDays');
-            this.$store.dispatch('university/fetchPairs');
             this.$store.dispatch('university/fetchFaculties');
             this.$store.dispatch('university/fetchSubFaculties');
             setTimeout(() => this.showDetails = true, 15000);

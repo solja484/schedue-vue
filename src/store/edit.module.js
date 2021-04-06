@@ -48,7 +48,6 @@ const editModule = {
             commit("setSelectedName", name);
         },
         setSelectedLevel({commit}, level) {
-            console.log("SET SELECTED LEVEL" + level);
             commit("setSelectedLevel", level);
         },
         setScheduleCode({commit}, code) {
@@ -64,14 +63,12 @@ const editModule = {
             commit("addTableRow", row);
         },
         changeRow({commit}, row) {
-            console.log("ROW TO CHANGE");
-            console.log(row);
             commit("changeTableRow", row);
         },
         editSchedule({state, commit}) {
             commit("setLoading", true, {root: true});
-            console.log("EDIT SCHEDULE POST DATA");
-            console.log(state);
+            //console.log("EDIT SCHEDULE POST DATA");
+          //  console.log(state);
             axios
                 .post(`/api/schedule/edit`, state)
                 .then(() => {
@@ -84,12 +81,13 @@ const editModule = {
         },
         createSchedule({commit, state}) {
             commit("setLoading", true, {root: true});
-            console.log("CREATE SCHEDULE POST DATA");
-            console.log(state);
+         //   console.log("CREATE SCHEDULE POST DATA");
+          //  console.log(state);
             axios
                 .post(`/api/schedule/create`, state)
                 .then(() => {
                     commit("clearFields");
+                    //TODO clear editScheduleData
                 })
                 .catch(error => console.log(error))
                 .finally(() =>

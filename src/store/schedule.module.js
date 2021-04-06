@@ -39,7 +39,6 @@ const scheduleModule = {
         createInfo: state => state.editInfo,
         loadingTable: state => state.loadingTable,
         fetchingDownloadInfo: state => state.fetchingDownloadInfo,
-
     },
     actions: {
         setCreateType({commit}, createType) {
@@ -85,9 +84,8 @@ const scheduleModule = {
         },
         setCreateScheduleData({commit, dispatch}, type) {
             commit("setLoading", true, {root: true});
-            console.log("set create schedule data");
             axios
-                .get('/api/schedule_new_code')
+                .get('/api/schedule/new')
                 .then(res => {
                     commit("setCreateScheduleData", {code: res.data, type: type});
                     dispatch('edit/clearTable', {}, {root: "true"});
@@ -98,9 +96,8 @@ const scheduleModule = {
                     commit("setLoading", false, {root: true}));
         },
         fetchAvailableCourses({commit}, data) {
-            // commit("setLoading", true, {root: true});
             commit("setTableLoading", true);
-            axios.get('/api/courses', {
+            axios.get('/api/university/courses', {
                 params: data
             })
                 .then(res => {
@@ -109,7 +106,6 @@ const scheduleModule = {
                 .catch(error =>
                     console.log(error))
                 .finally(() => {
-                    //   commit("setLoading", false, {root: true});
                     commit("setTableLoading", false);
                 });
         },
@@ -117,8 +113,7 @@ const scheduleModule = {
             commit("setLoading", true, {root: true});
             axios
                 .post(`/api/schedule/delete`, {code: code})
-                .then(res => {
-                    console.log(res);
+                .then(() => {
                     commit("deleteSchedule");
                 })
                 .catch(error => console.log(error))
@@ -128,17 +123,17 @@ const scheduleModule = {
     },
     mutations: {
         setCreateType(state, createType) {
-            console.log("SET CREATE TYPE " + createType);
             state.editInfo.schedule_type = createType;
         },
         setViewInfo(state, data) {
             state.viewInfo = data;
-            console.log("schedule info");
-            console.log(state.viewInfo);
         },
         setViewRows(state, data) {
             state.viewRows = data;
-            console.log(state.viewRows);
+            /*console.log("DATA FROM SERVER");
+            console.log(data);
+            console.log("VIEW ROWS");
+            console.log(state.viewRows);*/
         },
         setScheduleInfoEditable(state) {
             state.editInfo = state.viewInfo;
@@ -149,7 +144,6 @@ const scheduleModule = {
             state.editInfo.code = data.code;
             state.editInfo.schedule_type = data.type;
             state.editRows = [];
-            console.log(state.editInfo);
         },
         setAvailableCourses(state, data) {
             state.availableCourses = data;

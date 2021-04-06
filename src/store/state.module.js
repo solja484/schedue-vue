@@ -31,17 +31,17 @@ const stateModule = {
         login({commit}, credentials) {
             commit("setLoading", true);
             axios
-                .post("/api/login", credentials)
+                .post("/api/user/login", credentials)
                 .then(res => {
-                    commit("login", res.data[0]);
-                    if (res.data[0].role == 'student') {
+                    commit("login", res.data);
+                    if (res.data.role == 'student') {
                         commit("setUserRole", 'Студент');
                         commit("setRole", Role.STUDENT);
-                    } else if (res.data[0].role == 'metodist_dec') {
+                    } else if (res.data.role == 'metodist_dec') {
                         commit("setUserRole", 'Методист');
                         commit("setRole", Role.METHODIST);
                     }
-                    commit("setFaculty", res.data[0].faculty_id, {root: true});
+                    commit("setFaculty", res.data.faculty_id, {root: true});
                 })
                 .catch(error => console.log(error))
                 .finally(() =>

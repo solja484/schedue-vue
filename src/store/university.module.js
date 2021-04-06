@@ -33,7 +33,7 @@ const universityModule = {
         fetchFaculties({commit}) {
             commit("setLoading", true, {root: true});
             axios
-                .get(`/api/faculty`)
+                .get(`/api/university/faculty`)
                 .then(res => {
                     commit("setFaculties", res.data);
                 })
@@ -45,7 +45,7 @@ const universityModule = {
         fetchSubFaculties({commit}) {
             commit("setLoading", true, {root: true});
             axios
-                .get(`/api/sub_faculty`)
+                .get(`/api/university/sub_faculty`)
                 .then(res => {
                     commit("setSubFaculties", res.data);
                 })
@@ -57,7 +57,7 @@ const universityModule = {
         fetchSpeciality({commit}) {
             commit("setLoading", true, {root: true});
             axios
-                .get(`/api/speciality`)
+                .get(`/api/university/speciality`)
                 .then(res => {
                     commit("setSpeciality", res.data);
                 })
