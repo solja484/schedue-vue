@@ -7,7 +7,7 @@ import axios from "axios";
 const stateModule = {
     namespaced: true,
     state: {
-        auth: true,
+        auth: localStorage.getItem('auth'),
         user: methodist_hardcoded,
         user2:student_hardcoded,
         role: Role.METHODIST,
@@ -26,6 +26,9 @@ const stateModule = {
             commit("setCurrentState", currentState);
         },
         logout({commit}) {
+            localStorage.setItem('auth', 'N');
+            localStorage.setItem('login', "");
+            localStorage.setItem('password', "");
             commit("logout");
         },
         login({commit}, credentials) {
@@ -33,6 +36,9 @@ const stateModule = {
             axios
                 .post("/api/user/login", credentials)
                 .then(res => {
+                    localStorage.setItem('auth', 'Y');
+                    localStorage.setItem('login', credentials.login);
+                    localStorage.setItem('password', credentials.password);
                     commit("login", res.data);
                     if (res.data.role == 'student') {
                         commit("setUserRole", 'Студент');
@@ -54,9 +60,11 @@ const stateModule = {
         },
         setUserRole(state, role) {
             state.user.role = role;
+            localStorage.setItem('roleCyr', role);
         },
         setRole(state, role) {
             state.role = role;
+            localStorage.setItem('role', role);
         },
         logout(state) {
             state.user = {};

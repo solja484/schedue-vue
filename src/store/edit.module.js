@@ -66,32 +66,31 @@ const editModule = {
             commit("changeTableRow", row);
         },
         editSchedule({state, commit}) {
-            commit("setLoading", true, {root: true});
+            commit("setLoadingSave", true);
             //console.log("EDIT SCHEDULE POST DATA");
           //  console.log(state);
             axios
                 .post(`/api/schedule/edit`, state)
                 .then(() => {
-                    commit("clearFields");
+                    commit("setLoadingSave", false);
                 })
                 .catch(error => console.log(error))
                 .finally(() =>
-                    commit("setLoading", false, {root: true}));
+                    commit("clearFields"));
             return state.schedule_code;
         },
         createSchedule({commit, state}) {
-            commit("setLoading", true, {root: true});
+            commit("setLoadingSave", true);
          //   console.log("CREATE SCHEDULE POST DATA");
           //  console.log(state);
             axios
                 .post(`/api/schedule/create`, state)
                 .then(() => {
-                    commit("clearFields");
-                    //TODO clear editScheduleData
+                    commit("setLoadingSave", false);
                 })
                 .catch(error => console.log(error))
                 .finally(() =>
-                    commit("setLoading", false, {root: true}));
+                    commit("clearFields"));
             return state.schedule_code;
         },
     },
@@ -122,6 +121,8 @@ const editModule = {
         },
         setScheduleCode(state, code) {
             state.schedule_code = code;
+            console.log("set schedule code");
+            console.log(state);
         },
         setScheduleType(state, type) {
             state.schedule_type = type;

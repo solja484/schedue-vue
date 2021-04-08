@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header></Header>
-    <Breadcrumbs type="EDIT"></Breadcrumbs>
+    <Breadcrumbs type="EDIT" :option="option"></Breadcrumbs>
     <ScheduleInfoEdit :currentState="edit"></ScheduleInfoEdit>
     <Footer></Footer>
   </div>
@@ -19,7 +19,13 @@
     components: {ScheduleInfoEdit, Footer, Breadcrumbs, Header},
     data(){
       return{
-        edit:CurrentState.SCHEDULE_EDIT
+        edit:CurrentState.SCHEDULE_EDIT,
+        option:   {
+          text: this.$route.params.code+"",
+          href: "/schedules/view/"+this.$route.params.code,
+          active:false,
+          state: CurrentState.SCHEDULE_VIEW
+        }
       }
     }
   };

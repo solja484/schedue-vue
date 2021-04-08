@@ -16,7 +16,8 @@
     <EditableTableRow v-for="row in rows_all" :key="row.id" class="p-0"
                       :row="row"
                       :schedule_type="schedule_type"
-                      :disable="disable">
+                      :disable="disable"
+                      @clicked="changeRowNum">
     </EditableTableRow>
     </tbody>
 </template>
@@ -35,25 +36,39 @@
             return {
                 session_type: ScheduleType.SESSION,
                 viewState: CurrentState.SCHEDULE_VIEW,
-                editState: CurrentState.SCHEDULE_EDIT
+                editState: CurrentState.SCHEDULE_EDIT,
+                courses:[]
             }
         },
         computed: {
             pairs: function () {
                 return this.$store.getters['university/pairs']
             },
-            courses: function () {
+         /*   courses: function () {
                 if (this.currentState == CurrentState.SCHEDULE_VIEW)
                     return this.$store.getters['schedule/viewRows'].filter(c => c.day_id == this.day.id);
                 else
                     return this.$store.getters['schedule/editRows'].filter(c => c.day_id == this.day.id);
+            },*/
+            rows: {
+                get: function () {
+                       return this.courses;
+                },
+                set: function (newCourse) {
+                    if (this.currentState == CurrentState.SCHEDULE_VIEW)
+                        this.courses= this.$store.getters['schedule/viewRows'].filter(c => c.day_id == this.day.id);
+                    else
+                        this.courses= this.$store.getters['schedule/editRows'].filter(c => c.day_id == this.day.id);
+                    if(newCourse)
+                    this.courses.push(newCourse);
+                 //   return this.courses;
+                }
             },
             rowspan_all: function () {
                 let result = 3;
                 for (let i = 0; i < 7; i++) {
                     result += this.rowspan_pair(i + 1);
                 }
-
                 return result;
             },
             rows_all: function () {
@@ -70,7 +85,7 @@
                         }
                     }
                     if (counter == 0) {
-                        let empty = {
+                        const empty = {
                             "id": i,
                             "name": "",
                             "course_code": "",
@@ -93,6 +108,30 @@
             }
         },
         methods: {
+            changeRowNum(action, row) {
+                if(action==1) {
+                    console.log(action, row);
+                    this.rows = {
+                        "id": "row" + row.pair_id + row.day_id + row.row_num,
+                        "name": "",
+                        "course_code": "",
+                        "group": 100,
+                        "pair_id": row.pair_id,
+                        "day_id": row.day_id,
+                        "weeks": "",
+                        "classroom": "",
+                        "teacher": "",
+                        "row_num": 2
+                    };
+                    console.log(this.rows);
+                }else
+                    if(action==0){
+                        this.courses=this.courses.filter(r=>r.day_id!=row.day_id||r.pair_id!=row.pair_id||r.row_num!=row.row_num)
+                }
+                // if (action == 1) {
+                //   rows_all
+                // }
+            },
             rowspan_pair(pair_id) {
                 let rowspan = 0;
                 this.courses.forEach(function (c) {
@@ -106,6 +145,13 @@
             pair_time(pair_id) {
                 return this.pairs.find(p => p.number == pair_id).time;
             }
+        },
+        mounted(){
+            if (this.currentState == CurrentState.SCHEDULE_VIEW)
+                this.courses= this.$store.getters['schedule/viewRows'].filter(c => c.day_id == this.day.id);
+            else
+                this.courses= this.$store.getters['schedule/editRows'].filter(c => c.day_id == this.day.id);
+
         }
     }
 </script>

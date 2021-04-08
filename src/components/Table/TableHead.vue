@@ -4,8 +4,8 @@
             <th style="width: 2%!important;">День</th>
             <th style="width: 100px!important;">Час</th>
             <th style="width: 3%;" v-if="currentState==createState||currentState==editState"></th>
-            <th v-if="currentState==viewState">Дисципліна, викладач</th>
-            <th style="width: 40%;" v-if="currentState!=viewState">Дисципліна</th>
+            <th v-if="currentState==viewState">Дисципліна, викладач </th>
+            <th style="width: 40%;" v-if="currentState!=viewState">Дисципліна{{currentState}}</th>
             <th v-if="currentState!=viewState">Викладач</th>
             <th style="width: 10%;" v-if="schedule_type==session_type">Вид контролю</th>
             <th style="width: 7%;">Група</th>

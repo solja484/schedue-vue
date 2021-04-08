@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!loading">
+    <div v-if="!(loading||loadingTable)">
         <button @click="saveSchedule" class="btn btn-info btn-lg float-right mx-5 info-button"
                 :disabled="(selected_speciality==null&&selected_sub_faculty==null)||selected_name.length==0">
             <i class="fa fa-spinner fa-pulse fa-fw" v-if="loadingSave"></i>
@@ -9,6 +9,9 @@
                :additional="editInfo.code"></Title>
         <Title v-else-if="currentState==editState" message="Редагування розкладу "
                :additional="editInfo.code"></Title>
+        <b-alert fade variant="success" dismissible class="mx-5 px-5" v-model="showSaveAlert" v-if="!loadingSave">
+            Зміни збережено
+        </b-alert>
         <div class="container mx-5">
             <div class="row">
                 <strong class="col-sm-2 text-right text-14">Факультет</strong>
@@ -81,7 +84,7 @@
                 <b-form-input class="col-sm-4 t text-14" maxlength="100" v-model="selected_name"></b-form-input>
             </div>
         </div>
-        <div class="px-5 mt-3" v-if="!loadingTable">
+        <div class="px-5 mt-3" v-if="!(loadingTable||loading)">
             <ViewTable :schedule_type="schedule_type"
                        :code="schedule_code"
                        :currentState="currentState"
@@ -104,7 +107,7 @@
                 <div class="col-md-7"></div>
                 <div class="col-md-3">
                     <a class="text-danger text-16 p-2 text-middle float-right pointer"
-                       @click="showDeleteAlert=!showDeleteAlert">
+                       @click="showDeleteAlert=!showDeleteAlert" v-if="currentState==editState">
                         <i class="fa fa-trash mx-1"></i>
                         Видалити розклад</a>
                 </div>
@@ -193,10 +196,11 @@
             ViewTable, Title, BFormSelect, BFormSelectOption, BFormGroup,
             BFormRadioGroup, BFormInput, BSkeletonTable, BSkeleton, BAlert
         },
-        props: ['currentState'],
         data() {
             return {
+                currentState:this.$store.getters['state/currentState'],
                 showDeleteAlert: false,
+                showSaveAlert: false,
                 createState: CurrentState.SCHEDULE_CREATE,
                 editState: CurrentState.SCHEDULE_EDIT,
                 sub_faculty_type: ScheduleType.SUBFACULTY,
@@ -215,12 +219,11 @@
                 selected_academic_year: null,
                 selected_name: "",
                 selected_level: 1,
-                schedule_code: this.$store.getters['schedule/editInfo'].schedule_code,
+                schedule_code: this.$route.params.code,
                 level_options: [
                     {text: 'Бакалаврська', value: 1},
                     {text: 'Магістерська', value: 2}
-                ],
-                loadingSave:false
+                ]
             }
         },
         computed: {
@@ -253,6 +256,9 @@
             },
             loadingTable: function () {
                 return this.$store.getters['schedule/loadingTable'];
+            },
+            loadingSave: function () {
+                return this.$store.getters['edit/loadingSave'];
             }
         },
         watch: {
@@ -264,7 +270,8 @@
                 this.selected_academic_year = this.editInfo.academic_year;
                 this.selected_name = this.editInfo.title;
                 this.selected_level = this.editInfo.level;
-                this.schedule_code = this.editInfo.schedule_code;
+                this.schedule_code = this.editInfo.code;
+                this.$store.dispatch('edit/setScheduleType', this.editInfo.schedule_type);
             },
             selected_level: function () {
                 this.selected_speciality = null;
@@ -280,11 +287,13 @@
                 this.$store.dispatch('edit/setSelectedSubFaculty', this.selected_sub_faculty);
             },
             selected_academic_year: function () {
-                this.fetchAvailableCourses();
+                if (this.selected_level && this.selected_season && this.selected_academic_year)
+                    this.fetchAvailableCourses();
                 this.$store.dispatch('edit/setSelectedAcademicYear', this.selected_academic_year);
             },
             selected_season: function () {
-                this.fetchAvailableCourses();
+                if (this.selected_level && this.selected_season && this.selected_academic_year)
+                    this.fetchAvailableCourses();
                 this.$store.dispatch('edit/setSelectedSeason', this.selected_season);
             },
             selected_study_year: function () {
@@ -296,7 +305,7 @@
         },
         methods: {
             fetchAvailableCourses: function () {
-                let data = {
+                const data = {
                     "speciality": this.selected_speciality,
                     "faculty": this.methodist.faculty_id,
                     "level": this.selected_level,
@@ -306,15 +315,14 @@
                 this.$store.dispatch('schedule/fetchAvailableCourses', data);
             },
             saveSchedule: function () {
-                this.loadingSave=true;
                 if (this.currentState == this.editState)
                     this.$store.dispatch('edit/editSchedule').then(() => {
-                        this.loadingSave=false;
-                        this.$router.push('/schedules/view/' + this.editInfo.code);
+                        this.showSaveAlert = true;
+                        // this.$router.push('/schedules/view/' + this.editInfo.code);
                     });
                 else if (this.currentState == this.createState)
                     this.$store.dispatch('edit/createSchedule').then(() => {
-                        this.loadingSave=false;
+                        //this.showSaveAlert=true;
                         this.$router.push('/schedules/view/' + this.editInfo.code);
                     });
             },
@@ -325,21 +333,35 @@
                     .then(() => this.$router.push("/schedules"))
                     .catch((err) => console.log(err));
                 return null;
+            },
+            setSelecteds() {
+                this.selected_speciality = this.editInfo.speciality_id;
+                this.selected_sub_faculty = this.editInfo.subfaculty_id;
+                this.selected_study_year = this.editInfo.study_year;
+                this.selected_season = this.editInfo.season;
+                this.selected_academic_year = this.editInfo.academic_year;
+                this.selected_name = this.editInfo.title;
+                this.selected_level = this.editInfo.level;
+
             }
         },
         mounted() {
-            this.selected_speciality = this.editInfo.speciality_id;
-            this.selected_sub_faculty = this.editInfo.subfaculty_id;
-            this.selected_study_year = this.editInfo.study_year;
-            this.selected_season = this.editInfo.season;
-            this.selected_academic_year = this.editInfo.academic_year;
-            this.selected_name = this.editInfo.title;
-            this.selected_level = this.editInfo.level;
-            console.log("EDIT INFO");
-            console.log(this.editInfo);
+            if (this.$route.params.code != this.editInfo.code) {
+                this.$store.dispatch('schedule/fetchScheduleDataForEdit', this.$route.params.code)
+                    .then(() => {
+                        this.$store.dispatch('state/changeCurrentState',CurrentState.SCHEDULE_EDIT);
+                    })
+                    .catch((err) => console.log(err))
+                    .finally(() => {
+                        this.setSelecteds();
+                        console.log(this.editInfo);
+                    });
+            }else{
+                this.setSelecteds();
+            }
             this.$store.dispatch('edit/setSelectedFaculty', this.$store.getters['faculty']);
-            this.$store.dispatch('edit/setScheduleCode', this.editInfo.code);
-            this.$store.dispatch('edit/setScheduleType', this.schedule_type);
+            this.$store.dispatch('edit/setScheduleCode', this.$route.params.code);
+            this.$store.dispatch('edit/setScheduleType', this.editInfo.schedule_type);
         }
     }
 </script>

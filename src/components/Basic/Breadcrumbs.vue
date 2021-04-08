@@ -7,6 +7,7 @@
                 :active="link.active">
             {{ link.text }}
         </b-breadcrumb-item>
+        <b-breadcrumb-item v-if="option" @click="redirectTo(option)" :active="option.active">{{option.text}}</b-breadcrumb-item>
     </b-breadcrumb>
 </template>
 
@@ -21,7 +22,7 @@
                 links: this.$store.getters["state/breadcrumbs"][this.type]
             };
         },
-        props: ["type"],
+        props: ["type","option"],
         methods: {
             redirectTo: function (link) {
                 this.$store

@@ -4,7 +4,12 @@
     </tr>
     <tr v-else>
         <td class="no-padding text-middle">
-            <button class="btn m-0 text-muted" :disabled="disable"><i class="fa fa-plus"></i></button>
+            <button v-if='row.row_num==1' class="btn m-0 text-muted green-hover" :disabled="disable"
+                    @click="onClickPlus">
+                <i class="fa fa-plus "></i></button>
+            <button v-else class="btn m-0 text-muted red-hover" :disabled="disable"
+            @click="onClickMinus">
+                <i class="fa fa-minus "></i></button>
         </td>
         <td class="py-2 bold no-padding text-middle-left">
             <Autocomplete
@@ -139,6 +144,12 @@
                     "teacher": this.course_teacher,
                     "exam_type": this.course_exam?this.course_exam:null,
                     "row_num": this.row.row_num };
+            },
+            onClickMinus:function() {
+                this.$emit('clicked', 0, this.row);
+            },
+            onClickPlus:function () {
+                this.$emit('clicked', 1, this.row)
             }
         },
         watch: {
@@ -212,5 +223,13 @@
     .text-middle {
         text-align: center;
         vertical-align: middle !important;
+    }
+
+    .green-hover:hover i, .green-hover:active i, .green-hover:focus i{
+        color:#28a745;
+    }
+
+    .red-hover:hover i, .red-hover:active i,.red-hover:focus i{
+        color:#dc3545;
     }
 </style>

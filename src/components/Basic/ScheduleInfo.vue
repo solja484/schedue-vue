@@ -24,8 +24,8 @@
                 <span class="col-sm-8 " v-if="schedule.level==1">Бакалаврська</span>
                 <span class="col-sm-8 " v-else-if="schedule.level==2">Магістерська</span>
             </div>
-            <div class="row mb-1">
-                <strong class="col-sm-2 text-right mx-1" v-if="schedule.schedule_type!=subfaculty">Рік навчання</strong>
+            <div class="row mb-1" v-if="schedule.schedule_type!=subfaculty">
+                <strong class="col-sm-2 text-right mx-1" >Рік навчання</strong>
                 <span class="col-sm-8 ">{{studyYear}} </span>
             </div>
             <div class="row mb-1" v-if="schedule.schedule_type==subfaculty">

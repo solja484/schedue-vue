@@ -3,7 +3,7 @@
         <br>
         <button
                 @click="newSchedule()"
-                class="btn btn-light mx-5 add-schedule-button">
+                class="btn btn-light  add-schedule-button">
             <b-icon-plus class="bigger"></b-icon-plus>
             Додати розклад
         </button>

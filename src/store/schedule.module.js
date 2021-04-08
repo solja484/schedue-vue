@@ -62,6 +62,20 @@ const scheduleModule = {
                 });
 
         },
+        fetchScheduleDataForEdit({commit, dispatch}, code) {
+            commit("setLoading", true, {root: true});
+            axios
+                .get(`/api/schedule/` + code)
+                .then(res => {
+                    commit("setViewInfo", res.data.schedule);
+                    commit("setViewRows", res.data.courses);
+                })
+                .catch(error =>
+                    console.log(error))
+                .finally(() => {
+                    dispatch("setEditScheduleData");
+                });
+        },
         setEditScheduleData({state, commit, dispatch}) {
             let data = {
                 "speciality": state.viewInfo.speciality_id,
@@ -73,11 +87,8 @@ const scheduleModule = {
             commit("setLoading", true, {root: true});
             dispatch('edit/clearTable', {}, {root: "true"});
             dispatch('fetchAvailableCourses', data)
-                .then(() => {
-                    commit("setScheduleInfoEditable");
-                })
-                .catch(error =>
-                    console.log(error))
+                .then(() => commit("setScheduleInfoEditable"))
+                .catch(error => console.log(error))
                 .finally(() =>
                     commit("setLoading", false, {root: true}));
 
