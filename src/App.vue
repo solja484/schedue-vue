@@ -15,13 +15,17 @@
         name: "App",
         computed: {
             loading: function () {
-                return this.$store.getters['loading'];
+                return this.$store.getters["loading"];
             }
         },
         mounted() {
             this.$store.dispatch("university/fetchFaculties");
             this.$store.dispatch("university/fetchSpeciality");
             this.$store.dispatch("university/fetchSubFaculties");
+            if (localStorage.password && localStorage.login) this.$store.dispatch('login', {
+                login: localStorage.login,
+                password: localStorage.password
+            })
         }
     };
 </script>

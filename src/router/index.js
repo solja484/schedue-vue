@@ -42,7 +42,8 @@ const routes = [
     path: "/student/:code",
     name: "Student schedule",
     component: () => import("../views/Profile.vue")
-  },{
+  },
+  {
     path: "/methodist/:code",
     name: "Methodist schedule",
     component: () => import("../views/Profile.vue")
