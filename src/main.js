@@ -6,7 +6,13 @@ import axios from "vue-axios";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import VueExcelXlsx from "vue-excel-xlsx";
+import XLSX from "xlsx";
 
+Vue.use(XLSX);
+Vue.use(VueExcelXlsx);
+Vue.use(Autocomplete);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

@@ -1,6 +1,6 @@
 export const ScheduleType = {
-    SPECIALITY: "speciality",
-    SUBFACULTY:"sub_faculty",
-    SESSION:"session",
-    IDLE: "idle"
+  SPECIALITY: "speciality",
+  SUBFACULTY: "sub_faculty",
+  SESSION: "session",
+  IDLE: "idle"
 };

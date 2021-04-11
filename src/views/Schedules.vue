@@ -16,6 +16,6 @@ import Breadcrumbs from "../components/Basic/Breadcrumbs";
 import SchedulesALL from "../components/Basic/SchedulesALL";
 export default {
   name: "Schedules",
-  components: {SchedulesALL, Breadcrumbs, Header, Footer }
+  components: { SchedulesALL, Breadcrumbs, Header, Footer }
 };
 </script>

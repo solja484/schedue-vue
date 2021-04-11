@@ -3,9 +3,8 @@
     <Header></Header>
     <Breadcrumbs type="PROFILE"></Breadcrumbs>
     <UserInfo></UserInfo>
-    <Title v-if="role==student" message="Розклад" additional="" class="text-center"></Title>
-    <StudentTable v-if="role==student"></StudentTable>
-    <MethodistList v-if="role==methodist"></MethodistList>
+    <StudentList v-if="role == student"></StudentList>
+    <MethodistList v-if="role == methodist"></MethodistList>
     <Footer></Footer>
   </div>
 </template>
@@ -15,26 +14,33 @@ import Header from "../components/Basic/Header";
 import Footer from "../components/Basic/Footer";
 import UserInfo from "../components/Basic/UserInfo";
 import Breadcrumbs from "../components/Basic/Breadcrumbs";
-import StudentTable from "../components/Table/StudentTimetable";
-import Title from "../components/Nested/Title";
-import {Role} from "../models/entities/Role";
+import StudentList from "../components/Basic/StudentList";
+import { Role } from "../models/entities/Role";
 import MethodistList from "../components/Basic/MethodistList";
 
 export default {
   name: "Profile",
-  components: {MethodistList, Header, Breadcrumbs, StudentTable, UserInfo, Title, Footer },
-  data(){
+  components: {
+    MethodistList,
+    Header,
+    Breadcrumbs,
+    StudentList,
+    UserInfo,
+    Footer
+  },
+  data() {
     return {
-    role:this.$store.getters['role'] ,
-    student:Role.STUDENT,
-    methodist:Role.METHODIST
+      student: Role.STUDENT,
+      methodist: Role.METHODIST
+    };
+  },
+  computed: {
+    role: function() {
+      return this.$store.getters["state/role"];
     }
+  },
+  created() {
+    if (!localStorage.auth) this.$router.push("/");
   }
 };
 </script>
-
-<style scoped>
-.line-height-5 {
-  line-height: 7px;
-}
-</style>

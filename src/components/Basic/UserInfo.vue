@@ -1,25 +1,26 @@
 <template>
-    <div class="text-center line-height-5 m-5">
-        <p><b>Користувач</b></p>
-        <p>{{ user.name }}</p>
-        <p><b>Роль</b></p>
-        <p>{{ user.role }}</p>
-        <p><b>Етап</b></p>
-        <p>Презентації курсів</p>
-    </div>
+  <div class="text-center line-height-5 m-5" v-if="!loading">
+    <p class="my-0">
+      <b>Користувач</b><br />
+      {{ user.name }}<br />
+      <b>Роль</b><br />
+      {{ user.role }}
+    </p>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "UserInfo",
-        data() {
-            return {
-                user: this.$store.getters["user"]
-            };
-        },
+export default {
+  name: "UserInfo",
+  computed: {
+    user: function() {
+      return this.$store.getters["state/user"];
+    },
+    loading: function() {
+      return this.$store.getters["loading"];
     }
+  }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

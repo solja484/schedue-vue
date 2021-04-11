@@ -4,6 +4,9 @@
   </div>
 </template>
 <script>
+import { methodist_hardcoded } from "./assets/data/userSettings";
+import { Role } from "./models/entities/Role";
+
 const head = document.getElementsByTagName("HEAD")[0];
 const link = document.createElement("link");
 link.rel = "stylesheet";
@@ -13,13 +16,19 @@ head.appendChild(link);
 
 export default {
   name: "App",
+  computed: {
+    loading: function() {
+      return this.$store.getters["loading"];
+    }
+  },
   mounted() {
-    this.$store.dispatch("fetchFaculties");
-    this.$store.dispatch("fetchSpeciality");
-    this.$store.dispatch("fetchSubFaculties");
-    this.$store.dispatch("fetchDays");
-    this.$store.dispatch("fetchPairs");
-
+    localStorage.setItem("user", JSON.stringify(methodist_hardcoded));
+    localStorage.auth = true;
+    localStorage.role = Role.METHODIST;
+    console.log("USER", JSON.parse(localStorage.user));
+    this.$store.dispatch("university/fetchFaculties");
+    this.$store.dispatch("university/fetchSpeciality");
+    this.$store.dispatch("university/fetchSubFaculties");
   }
 };
 </script>

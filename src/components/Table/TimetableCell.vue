@@ -1,20 +1,68 @@
 <template>
-  <td>
-    <p class="m-0">
-      <span class="pill code">224455</span
-      ><span class="pill lecture mx-1">Лекція</span>
+  <div
+    class="px-2 py-3 cursor border-bottom"
+    :class="{ hover: type == 'courses' }"
+    :id="'cell-' + info.course_cdoc + '-' + info.day_id + '-' + info.pair_id"
+  >
+    <p class="m-0" v-if="type == 'courses'">
+      <span class="badge badge-secondary p-1">{{ info.course_cdoc }}</span>
+      <span v-if="info.group == 0" class="badge badge-info mx-1 p-1"
+        >Лекція</span
+      >
+      <span v-else class="badge practice mx-1 p-1">{{ info.group }} група</span>
     </p>
-    <p class="course_title p-0 m-0">{{ info[0] }}</p>
-    <p class="course_teacher p-0 m-0">П.І.Б. викладача</p>
-    <p></p>
-  </td>
+    <p v-else>
+      <span class="float-right">{{ info.weeks }}</span>
+      <span class="badge badge-secondary p-1">{{ info.course_cdoc }}</span>
+      <br />
+      <span class="badge practice mr-1 p-1" v-if="info.group"
+        >{{ info.group }} група</span
+      >
+      <span v-else class="badge practice mr-1 p-1">Всі групи</span>
+    </p>
+    <a
+      class="p-0 m-0 black-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      :href="'https://my.ukma.edu.ua/course/' + info.course_cdoc"
+      >{{ info.name }}</a
+    ><br />
+    <em class=" p-0 m-0 text-muted">{{ info.teacher }}</em>
+  </div>
 </template>
 
 <script>
 export default {
   name: "TimetableCell",
-  props: ["info"]
+  props: ["info", "type"]
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@import "../../assets/scss/_variables.scss";
+.hover:hover {
+  background: $gray-hover;
+}
+
+.cursor {
+  cursor: default;
+}
+.practice {
+  color: white;
+  background: $success;
+}
+
+.lecture {
+  color: white;
+  background: $info;
+  border-color: $info-border;
+}
+
+.black-link,
+.black-link:hover,
+.black-link:focus,
+.black-link:active {
+  font-weight: bold;
+  color: #000;
+}
+</style>

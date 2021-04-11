@@ -1,95 +1,101 @@
 <template>
-    <div class="mx-5">
-        <br>
-        <button
-                @click="newSchedule()"
-                class="btn btn-light mx-5 add-schedule-button">
-            <b-icon-plus class="bigger"></b-icon-plus>
-            Додати розклад
-        </button>
-        <div v-if="!loading">
-            <Title message="Розклади за спеціальністю" additional=""></Title>
-            <ScheduleListELem class="mx-5" v-for="s in getSchedulesByType(speciality)" :key="s.id"
-                              :code="s.code" :title="s.title"></ScheduleListELem>
-            <Title message="Розклади за кафедрами" additional=""></Title>
-            <ScheduleListELem class="mx-5" v-for="s in getSchedulesByType(sub_faculty)" :key="s.id"
-                              :code="s.code" :title="s.title"></ScheduleListELem>
-            <Title message="Розклади сесії" additional=""></Title>
-            <ScheduleListELem class="mx-5" v-for="s in getSchedulesByType(session)" :key="s.id"
-                              :code="s.code" :title="s.title"></ScheduleListELem>
-        </div>
+  <div class="mx-5">
+    <br />
+    <button @click="newSchedule()" class="btn btn-light  add-schedule-button">
+      <b-icon-plus class="bigger"></b-icon-plus>
+      Додати розклад
+    </button>
+    <div v-if="!loading">
+      <div v-for="block in scheduleBlocks" :key="block.type">
+        <MethodistListElem
+          :type="block.type"
+          :title="block.title"
+        ></MethodistListElem>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    import Title from "../Nested/Title";
-    import {CurrentState} from "../../models/entities/CurrentState";
-    import {ScheduleType} from "../../models/entities/ScheduleType";
-    import {BIconPlus} from "bootstrap-vue";
-    import ScheduleListELem from "../Nested/ScheduleListELem";
+import { CurrentState } from "../../models/entities/CurrentState";
+import { ScheduleType } from "../../models/entities/ScheduleType";
+import { BIconPlus } from "bootstrap-vue";
+import MethodistListElem from "../Nested/MethodistListElem";
 
-    export default {
-        name: "MethodistList",
-        components: {ScheduleListELem, Title, BIconPlus},
-        data() {
-            return {
-                speciality: ScheduleType.SPECIALITY,
-                sub_faculty: ScheduleType.SUBFACULTY,
-                session: ScheduleType.SESSION,
-                methodist: this.$store.getters['user'].methodist,
-            }
-        },
-        methods: {
-            getSchedulesByType: function (type) {
-                return this.methodistSchedules.filter(s => s.schedule_type == type);
-            },
-            newSchedule: function () {
-                this.$store
-                    .dispatch("changeCurrentState", CurrentState.SCHEDULE_NEW)
-                    .then(() => {
-                        this.$router.push("/schedules/new").then();
-                    })
-                    .catch(err => console.log(err));
-            }
-        },
-        computed: {
-            loading: function () {
-                return this.$store.getters['loading'];
-            },
-            methodistSchedules: function () {
-                return this.$store.getters['methodistSchedules'];
-            }
-        },
-        mounted() {
-            this.$store.dispatch('fetchMethodistSchedules');
-        }
+export default {
+  name: "MethodistList",
+  components: { MethodistListElem, BIconPlus },
+  data() {
+    return {
+      speciality: ScheduleType.SPECIALITY,
+      sub_faculty: ScheduleType.SUBFACULTY,
+      session: ScheduleType.SESSION,
+      methodist: this.$store.getters["state/user"].methodist,
+      scheduleBlocks: [
+        { title: "Розклади за спеціальністю", type: ScheduleType.SPECIALITY },
+        { title: "Розклади кафедри", type: ScheduleType.SUBFACULTY },
+        { title: "Розклади сесії", type: ScheduleType.SESSION }
+      ]
     };
+  },
+  methods: {
+    newSchedule: function() {
+      this.$store
+        .dispatch("state/changeCurrentState", CurrentState.SCHEDULE_NEW)
+        .then(() => {
+          this.$router.push("/schedules/new").then();
+        })
+        .catch(err => console.log(err));
+    }
+  },
+  computed: {
+    auth: function() {
+      return localStorage.auth;
+    },
+    loading: function() {
+      return this.$store.getters["loading"];
+    }
+  },
+  mounted() {
+    this.$store.dispatch("list/fetchMethodistSchedules");
+    console.log(localStorage);
+  }
+};
 </script>
 
-<style lang="scss" scoped>
-    @import "../../assets/scss/_variables.scss";
+<style lang="scss">
+@import "../../assets/scss/_variables.scss";
 
-    .add-schedule-button {
-        font-size: 20px;
-        background: $gray-fill;
-        border-color: $gray-border;
-        float: right;
-    }
+.add-schedule-button {
+  font-size: 20px;
+  background: $gray-fill;
+  border-color: $gray-border;
+  float: right;
+}
 
-    .text-16 {
-        font-size: 16px;
-        text-align: left;
-    }
+.text-16 {
+  font-size: 16px;
+  text-align: left;
+}
 
-    .text-18 {
-        font-size: 18px;
-    }
+.text-18 {
+  font-size: 18px;
+}
 
-    .border-none,
-    .border-none:active,
-    .border-none:focus,
-    .border-none:hover {
-        border: none;
-    }
+.text-middle {
+  vertical-align: center !important;
+}
 
+.border-none,
+.border-none:active,
+.border-none:focus,
+.border-none:hover {
+  border: none;
+}
+
+.spoiler-colors {
+  color: $spoiler-text;
+  background: $spoiler-fill;
+  border-color: $spoiler-border;
+}
 </style>
