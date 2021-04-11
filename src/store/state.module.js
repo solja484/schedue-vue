@@ -2,18 +2,18 @@ import { Role } from "../models/entities/Role";
 import { CurrentState } from "../models/entities/CurrentState";
 import { breadcrumbs } from "../assets/data/breadcrumbs";
 import {
-  methodist_hardcoded,
-  student_hardcoded
-} from "../assets/data/user_hardcoded";
+  methodist_hardcoded
+  //  student_hardcoded
+} from "../assets/data/userSettings";
 import axios from "axios";
 
 const stateModule = {
   namespaced: true,
   state: {
-    auth: localStorage.getItem("auth"),
-    user: methodist_hardcoded,
-    user2: student_hardcoded,
-    role: Role.METHODIST,
+    auth: localStorage.auth,
+    user: localStorage.user ? JSON.parse(localStorage.user) : {},
+    user2: methodist_hardcoded,
+    role: localStorage.role,
     currentState: CurrentState.MAIN,
     breadcrumbs: breadcrumbs
   },
@@ -29,31 +29,36 @@ const stateModule = {
       commit("setCurrentState", currentState);
     },
     logout({ commit }) {
-      localStorage.setItem("auth", "N");
-      localStorage.setItem("login", "");
-      localStorage.setItem("password", "");
+      localStorage.removeItem("user");
+      localStorage.role = Role.GUEST;
+      localStorage.auth = false;
       commit("logout");
     },
-    login({ commit }, credentials) {
-      commit("setLoading", true);
+    login({ commit, dispatch }, credentials) {
+      commit("setLoading", true, { root: true });
       axios
         .post("/api/user/login", credentials)
         .then(res => {
-          localStorage.setItem("auth", "Y");
-          localStorage.setItem("login", credentials.login);
-          localStorage.setItem("password", credentials.password);
+          localStorage.auth = true;
           commit("login", res.data);
           if (res.data.role == "student") {
             commit("setUserRole", "Студент");
+            localStorage.role = Role.STUDENT;
             commit("setRole", Role.STUDENT);
+            dispatch("changeFaculty", res.data.student.faculty_id, {
+              root: true
+            });
           } else if (res.data.role == "metodist_dec") {
             commit("setUserRole", "Методист");
+            localStorage.role = Role.METHODIST;
             commit("setRole", Role.METHODIST);
+            dispatch("changeFaculty", res.data.methodist.faculty_id, {
+              root: true
+            });
           }
-          commit("setFaculty", res.data.faculty_id, { root: true });
         })
         .catch(error => console.log(error))
-        .finally(() => commit("setLoading", false));
+        .finally(() => commit("setLoading", false, { root: true }));
     }
   },
   mutations: {
@@ -62,18 +67,19 @@ const stateModule = {
     },
     setUserRole(state, role) {
       state.user.role = role;
-      localStorage.setItem("roleCyr", role);
+      localStorage.user = JSON.stringify(state.user);
     },
     setRole(state, role) {
       state.role = role;
-      localStorage.setItem("role", role);
     },
     logout(state) {
-      state.user = {};
-      state.role = Role.GUEST;
+      state.auth = localStorage.auth;
+      state.user = null;
+      state.role = localStorage.role;
     },
     login(state, data) {
-      state.user = data;
+      localStorage.user = JSON.stringify(data);
+      state.user = JSON.parse(localStorage.user);
     }
   }
 };

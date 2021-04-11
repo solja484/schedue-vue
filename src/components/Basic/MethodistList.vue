@@ -49,12 +49,16 @@ export default {
     }
   },
   computed: {
+    auth: function() {
+      return localStorage.auth;
+    },
     loading: function() {
       return this.$store.getters["loading"];
     }
   },
   mounted() {
     this.$store.dispatch("list/fetchMethodistSchedules");
+    console.log(localStorage);
   }
 };
 </script>

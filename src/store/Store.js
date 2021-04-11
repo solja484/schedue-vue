@@ -39,6 +39,7 @@ const store = new Store({
   },
   mutations: {
     setFaculty(state, newFaculty) {
+      console.log(newFaculty);
       state.faculty = newFaculty;
     },
     setLoading(state, load) {

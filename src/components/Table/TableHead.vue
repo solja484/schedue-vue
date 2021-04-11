@@ -12,11 +12,11 @@
         Дисципліна{{ currentState }}
       </th>
       <th v-if="currentState != viewState">Викладач</th>
-      <th style="width: 10%;" v-if="schedule_type == session_type">
+      <th style="width: 10%;" v-if="schedule_type == sessionType">
         Вид контролю
       </th>
       <th style="width: 7%;">Група</th>
-      <th style="width: 7%;" v-if="schedule_type != session_type">Тижні</th>
+      <th style="width: 7%;" v-if="schedule_type != sessionType">Тижні</th>
       <th v-else style="width: 7%;">Дата</th>
       <th style="width: 7%;">Аудиторія</th>
     </tr>
@@ -32,7 +32,7 @@ export default {
   props: ["schedule_type", "code"],
   data() {
     return {
-      session_type: ScheduleType.SESSION,
+      sessionType: ScheduleType.SESSION,
       currentState: this.$store.getters["state/currentState"],
       createState: CurrentState.SCHEDULE_CREATE,
       editState: CurrentState.SCHEDULE_EDIT,

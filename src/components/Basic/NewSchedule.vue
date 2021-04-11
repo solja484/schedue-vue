@@ -9,7 +9,8 @@
           v-model="selected"
           size="md"
           class="mb-3"
-          variant="secondary">
+          variant="secondary"
+        >
           <template #first>
             <b-form-select-option :value="null" disabled>
               Не обрано
@@ -19,7 +20,8 @@
             v-for="type in schedule_types"
             :key="type.value"
             :value="type.value"
-            class="py-3">
+            class="py-3"
+          >
             {{ type.title }}
           </b-form-select-option>
         </b-form-select>
@@ -27,7 +29,8 @@
           class="btn btn-secondary"
           type="button"
           @click="createNewSchedule"
-          :disabled="selected == null">
+          :disabled="selected == null"
+        >
           Створити
         </button>
       </form>
@@ -62,7 +65,11 @@ export default {
       this.$store
         .dispatch("schedule/setCreateType", this.selected)
         .then(() =>
-          this.$store.dispatch("state/changeCurrentState", CurrentState.SCHEDULE_CREATE))
+          this.$store.dispatch(
+            "state/changeCurrentState",
+            CurrentState.SCHEDULE_CREATE
+          )
+        )
         .catch(err => console.log(err))
         .finally(() => this.$router.push("/schedules/create"));
     }

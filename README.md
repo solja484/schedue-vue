@@ -1,24 +1,30 @@
-# schedule-vue
-
-## Project setup
+# KMA Schedule
+##schedule-vue
+KMA Schedule – курсовий проект, створений на основі бази даних системи
+        автозапису на вибіркові дисципліни НаУКМА, призначений надавати доступ
+        до триместрових розкладів занять в Національному університеті
+        «Києво-Могилянська академія».
+        Метою проекту є спрощення процесу створення розкладів для методистів
+        НаУКМА шляхом його автоматизації та узагальнення формату і вигляду
+        розкладів для усіх факультетів. Також, студентам буде надана можливість
+        переглядати зведений розклад за індивідуальним навчальним планом, щоб
+        полегшити формування власного розкладу на етапі запису в групи.
+### Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+#### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+#### Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Lints and fixes files
+#### Lints and fixes files
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

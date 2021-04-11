@@ -27,9 +27,11 @@
         <span class="badge badge-danger" v-else>Курс не відбувся</span>
       </p>
       <p class="my-1" v-for="type in reg_type" :key="type.name">
-        <span class="pill code" v-if="type.name == course.reg_type">{{
-          type.translate
-        }}</span>
+        <span
+          class="badge badge-secondary"
+          v-if="type.name == course.reg_type"
+          >{{ type.translate }}</span
+        >
       </p>
       <p class="my-1 text-12">
         {{ faculty }}<br />

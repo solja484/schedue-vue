@@ -1,6 +1,6 @@
 <template>
   <table class="table table-bordered table-responsive mb-5">
-    <thead>
+    <thead class="table-header">
       <tr class="text-center table-header">
         <th style="width: 5%;">Час</th>
         <th v-for="day in days" :key="day.number" style="width: 16%;">

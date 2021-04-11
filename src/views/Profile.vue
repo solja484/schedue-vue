@@ -30,10 +30,17 @@ export default {
   },
   data() {
     return {
-      role: this.$store.getters["state/role"],
       student: Role.STUDENT,
       methodist: Role.METHODIST
     };
+  },
+  computed: {
+    role: function() {
+      return this.$store.getters["state/role"];
+    }
+  },
+  created() {
+    if (!localStorage.auth) this.$router.push("/");
   }
 };
 </script>

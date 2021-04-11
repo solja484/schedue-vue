@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center line-height-5 m-5">
+  <div class="text-center line-height-5 m-5" v-if="!loading">
     <p class="my-0">
       <b>Користувач</b><br />
       {{ user.name }}<br />
@@ -15,6 +15,9 @@ export default {
   computed: {
     user: function() {
       return this.$store.getters["state/user"];
+    },
+    loading: function() {
+      return this.$store.getters["loading"];
     }
   }
 };

@@ -1,5 +1,5 @@
 import { levels, seasons, days, pairs } from "../assets/data/static";
-import { schedule_types } from "../assets/data/schedule_types";
+import { schedule_types } from "../assets/data/scheduleTypes";
 import axios from "axios";
 
 const universityModule = {

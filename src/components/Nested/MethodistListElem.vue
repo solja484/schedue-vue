@@ -37,13 +37,13 @@
               v-if="sch.draft == 1"
               class="text-muted text-28 m-2 float-left link"
               title="Розклад НЕ доступний для студентів. Натисніть, щоб відкрити доступ."
-              @click="showSchedule(sch.id)"
+              @click="showSchedule(sch)"
             ></b-icon-eye-slash>
             <b-icon-eye
               v-else
               class="text-blue text-28  m-2 float-left"
               title="Розклад доступний для студентів. Натисніть, щоб закрити доступ."
-              @click="hideSchedule(sch.id)"
+              @click="hideSchedule(sch)"
             ></b-icon-eye>
             <BSkeleton
               type="input"
@@ -136,6 +136,7 @@ export default {
       );
     },
     showSchedule: function(schedule) {
+      console.log(schedule);
       this.loadingElemId = schedule.id;
       this.$store
         .dispatch("list/changeDraftMode", { id: schedule.id, draft: 0 })
@@ -147,6 +148,7 @@ export default {
         .finally(() => (this.showSuccessAlert = true));
     },
     hideSchedule: function(schedule) {
+      console.log(schedule);
       this.loadingElemId = schedule.id;
       this.$store
         .dispatch("list/changeDraftMode", { id: schedule.id, draft: 1 })

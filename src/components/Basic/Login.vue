@@ -37,13 +37,11 @@ export default {
       this.$store
         .dispatch("state/login", this.form)
         .then(() => {
-          let user = this.$store.getters["user"];
-          let userRole = this.$store.getters["role"];
-          this.$store.dispatch(
-            "state/changeCurrentState",
-            CurrentState.USER_PROFILE
-          );
-          this.$router.push("/" + userRole + "/" + user.code);
+          //  let user = this.$store.getters["user"];
+          //   let userRole = this.$store.getters["role"];
+          this.$store.dispatch("state/changeCurrentState", CurrentState.MAIN);
+          // this.$router.push("/" + userRole + "/" + user.code);
+          this.$router.push("/");
         })
         .catch(err => console.log(err));
     }

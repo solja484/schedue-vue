@@ -30,6 +30,11 @@ const schedulesListModule = {
     },
     fetchMethodistSchedules({ commit, rootGetters }) {
       commit("setLoading", true, { root: true });
+      console.log(
+        rootGetters.currentYear,
+        rootGetters.currentSeason,
+        rootGetters.faculty
+      );
       axios
         .get(`/api/schedules/methodist`, {
           params: {
@@ -42,25 +47,29 @@ const schedulesListModule = {
         .catch(error => console.log(error))
         .finally(() => commit("setLoading", false, { root: true }));
     },
-    changeDraftMode({ commit }, data) {
+    changeDraftMode({ state, commit }, data) {
       commit("setLoadingElem", true);
+      console.log(data);
       axios
         .post("/api/schedule/draft", data)
-        .then(() => commit("setScheduleDraftMode", data))
+        .then(() => {
+          let schedule = state.methodist.find(sch => sch.id == data.id);
+          schedule.draft = data.draft;
+
+          let updatedList = state.methodist.map(item => {
+            if (item.id == data.id) return { ...item, draft: data.draft };
+            return item;
+          });
+
+          commit("setScheduleDraftMode", updatedList);
+        })
         .catch(err => console.log(err))
         .finally(() => commit("setLoadingElem", false));
     }
   },
   mutations: {
     setScheduleDraftMode(state, data) {
-      let schedule = state.methodist.find(sch => sch.id == data.id);
-      schedule.draft = data.draft;
-
-      let updatedList = state.methodist.map(item => {
-        if (item.id == data.id) return { ...item, draft: data.draft };
-        return item;
-      });
-      state.methodist = updatedList;
+      state.methodist = data;
     },
     setLoadingElem(state, load) {
       state.loadingElem = load;

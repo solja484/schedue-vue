@@ -28,8 +28,11 @@ export default {
       }
     };
   },
-  created(){
-    this.$store.dispatch('state/changeCurrentState', CurrentState.SCHEDULE_EDIT);
+  created() {
+    this.$store.dispatch(
+      "state/changeCurrentState",
+      CurrentState.SCHEDULE_EDIT
+    );
   }
 };
 </script>
