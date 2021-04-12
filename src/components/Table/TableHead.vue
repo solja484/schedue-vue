@@ -12,11 +12,11 @@
         Дисципліна{{ currentState }}
       </th>
       <th v-if="currentState != viewState">Викладач</th>
-      <th style="width: 10%;" v-if="schedule_type == sessionType">
+      <th style="width: 10%;" v-if="scheduleType == sessionType">
         Вид контролю
       </th>
       <th style="width: 7%;">Група</th>
-      <th style="width: 7%;" v-if="schedule_type != sessionType">Тижні</th>
+      <th style="width: 7%;" v-if="scheduleType != sessionType">Тижні</th>
       <th v-else style="width: 7%;">Дата</th>
       <th style="width: 7%;">Аудиторія</th>
     </tr>
@@ -29,7 +29,7 @@ import { CurrentState } from "../../models/entities/CurrentState";
 
 export default {
   name: "TableHead",
-  props: ["schedule_type", "code"],
+  props: ["scheduleType", "code"],
   data() {
     return {
       sessionType: ScheduleType.SESSION,

@@ -53,7 +53,7 @@
         >
           <b-form-radio-group
             v-model="selected_level"
-            :options="level_options"
+            :options="levelOptions"
             :aria-describedby="ariaDescribedby"
           ></b-form-radio-group>
         </b-form-group>
@@ -140,11 +140,11 @@
           class="col-sm-1 text-14 mb-1"
           size="sm"
         >
-          <b-form-select-option :value="academic_year" class="text-14">
-            {{ academic_year }}
+          <b-form-select-option :value="academicYear" class="text-14">
+            {{ academicYear }}
           </b-form-select-option>
-          <b-form-select-option :value="next_academic_year" class="text-14">
-            {{ next_academic_year }}
+          <b-form-select-option :value="nextAcademicYear" class="text-14">
+            {{ nextAcademicYear }}
           </b-form-select-option>
         </b-form-select>
       </div>
@@ -165,10 +165,9 @@
     </div>
     <div class="px-5 mt-3" v-if="!(loadingTable || loading)">
       <ViewTable
-        :schedule_type="schedule_type"
+        :scheduleType="schedule_type"
         :code="schedule_code"
         :currentState="currentState"
-        :id="'viewschedule-' + schedule_code"
         :disable="selected_speciality == null && selected_sub_faculty == null"
       ></ViewTable>
     </div>
@@ -320,11 +319,11 @@ export default {
       showDeleteAlert: false,
       showSaveAlert: false,
       subFacultyType: ScheduleType.SUBFACULTY,
-      academic_year: this.$store.getters["university/academic_year"],
+      academicYear: this.$store.getters["university/academic_year"],
       methodist: this.$store.getters["state/user"].methodist,
       seasons: this.$store.getters["university/seasons"],
       schedule_code: this.$route.params.code,
-      level_options: [
+      levelOptions: [
         { text: "Бакалаврська", value: 1 },
         { text: "Магістерська", value: 2 }
       ]
@@ -408,8 +407,8 @@ export default {
         l => l.level == this.selected_level
       );
     },
-    next_academic_year: function() {
-      return this.academic_year + 1;
+    nextAcademicYear: function() {
+      return this.academicYear + 1;
     },
     subfacultyFiltered: function() {
       if (this.schedule_type == this.subFacultyType)
@@ -471,11 +470,6 @@ export default {
         "edit/fetchEditScheduleData",
         this.$route.params.code
       );
-      //.then(()=>{
-      //   this.$store.dispatch('schedule/fetchAvailableCourses',{
-      //     faculty_if
-      //});
-      // });
     } else if (this.currentState == this.createState) {
       if (this.$store.getters["state/role"] == Role.GUEST)
         this.$router.push("/schedules");

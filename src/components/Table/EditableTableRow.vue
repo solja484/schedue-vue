@@ -25,7 +25,7 @@
     </td>
     <td class="py-2 bold no-padding text-middle-left">
       <Autocomplete
-        v-if="default_value == ''"
+        v-if="defaultValue == ''"
         :search="search"
         :get-result-value="getResultValue"
         @submit="onSubmit"
@@ -39,7 +39,7 @@
       </Autocomplete>
       <Autocomplete
         v-else
-        :default-value="default_value"
+        :default-value="defaultValue"
         :search="search"
         :get-result-value="getResultValue"
         @submit="onSubmit"
@@ -145,17 +145,12 @@ export default {
     courses: function() {
       return this.$store.getters["schedule/availableCourses"];
     },
-    default_value: function() {
+    defaultValue: function() {
       if (this.row.name.length == 0) return "";
       return this.row.course_code + " " + this.row.name;
     }
   },
   methods: {
-    getCourseGroup: function() {
-      if (this.row.group == 0) return "Лекція";
-      if (this.row.group == 100) return "";
-      return this.row.group;
-    },
     search: function(input) {
       if (input.length < 1) {
         return [];

@@ -26,7 +26,7 @@
         >
         <span class="badge badge-danger" v-else>Курс не відбувся</span>
       </p>
-      <p class="my-1" v-for="type in reg_type" :key="type.name">
+      <p class="my-1" v-for="type in regType" :key="type.name">
         <span
           class="badge badge-secondary"
           v-if="type.name == course.reg_type"
@@ -35,7 +35,7 @@
       </p>
       <p class="my-1 text-12">
         {{ faculty }}<br />
-        {{ subfaculty_name }}
+        {{ subFacultyName }}
       </p>
       <p class="my-1 text-12 bold">
         Тижні: {{ item.weeks }}<br />
@@ -54,7 +54,7 @@ export default {
   props: ["item"],
   data() {
     return {
-      reg_type: [
+      regType: [
         { name: "mandat", translate: "Нормативна" },
         { name: "zfree", translate: "Вільного вибору" },
         { name: "option", translate: "Професійно-орієнтована" }
@@ -77,7 +77,7 @@ export default {
         sub => sub.id == this.item.subfaculty
       );
     },
-    subfaculty_name: function() {
+    subFacultyName: function() {
       return this.subfaculty.name;
     }
   }

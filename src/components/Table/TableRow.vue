@@ -15,7 +15,7 @@
       <em> {{ row.teacher }} </em>
     </td>
     <td v-else class="py-4"></td>
-    <td v-if="schedule_type == session_type" class="px-0 py-2 text-middle">
+    <td v-if="scheduleType == sessionType" class="px-0 py-2 text-middle">
       {{ row.exam_type }}
     </td>
     <td v-if="row.group != 0 && row.group < 100" class="px-0 py-2 text-middle">
@@ -36,10 +36,10 @@ import { ScheduleType } from "../../models/entities/ScheduleType";
 
 export default {
   name: "TableRow",
-  props: ["schedule_type", "row"],
+  props: ["scheduleType", "row"],
   data() {
     return {
-      session_type: ScheduleType.SESSION
+      sessionType: ScheduleType.SESSION
     };
   }
 };

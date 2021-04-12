@@ -17,7 +17,7 @@
             </b-form-select-option>
           </template>
           <b-form-select-option
-            v-for="type in schedule_types"
+            v-for="type in scheduleTypes"
             :key="type.value"
             :value="type.value"
             class="py-3"
@@ -53,7 +53,7 @@ export default {
     };
   },
   computed: {
-    schedule_types: function() {
+    scheduleTypes: function() {
       return this.$store.getters["university/schedule_types"];
     },
     loading: function() {

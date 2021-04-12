@@ -31,7 +31,7 @@
         </div>
       </b-collapse>
       <b-collapse :id="'col' + type + f.id" class="mt-2" v-else>
-        <div v-for="s in sub_faculty" :key="s.id" class="ml-5">
+        <div v-for="s in subFaculty" :key="s.id" class="ml-5">
           <button
             v-b-toggle="'col-sub-' + s.id"
             v-if="s.faculty_id == f.id"
@@ -44,7 +44,7 @@
             class="mt-2"
             v-if="s.faculty_id == f.id"
           >
-            <ScheduleList :type="type" :faculty="f.id" :sub_faculty="s.id">
+            <ScheduleList :type="type" :faculty="f.id" :subFaculty="s.id">
             </ScheduleList>
           </b-collapse>
         </div>
@@ -65,7 +65,7 @@ export default {
     faculties: function() {
       return this.$store.getters["university/faculties"];
     },
-    sub_faculty: function() {
+    subFaculty: function() {
       return this.$store.getters["university/sub_faculty"];
     },
     speciality: function() {

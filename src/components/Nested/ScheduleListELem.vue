@@ -4,9 +4,6 @@
       <span class="badge badge-secondary mr-2">{{ code }}</span>
       {{ title }}
     </a>
-    <!--button class="btn btn-info btn-sm float-right info-button">
-            <i class="fa fa-download"></i> Завантажити
-        </button-->
   </div>
 </template>
 

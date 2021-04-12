@@ -21,7 +21,7 @@ const store = new Store({
     download: downloadModule
   },
   state: {
-    faculty: 123,
+    faculty: null,
     loading: false,
     currentYear: 2020,
     currentSeason: 2
@@ -39,7 +39,6 @@ const store = new Store({
   },
   mutations: {
     setFaculty(state, newFaculty) {
-      console.log(newFaculty);
       state.faculty = newFaculty;
     },
     setLoading(state, load) {

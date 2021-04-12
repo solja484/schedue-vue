@@ -19,7 +19,7 @@
     >
       Розклад {{ alertTitle }} закрито для перегляду студентами
     </b-alert>
-    <div v-if="type != subfacultyType">
+    <div v-if="type != subFacultyType">
       <div v-for="l in levels" :key="l.course" class="ml-5">
         <button
           v-b-toggle="'col-sub-' + type + l.course"
@@ -111,7 +111,7 @@ export default {
     return {
       showSuccessAlert: false,
       hideSuccessAlert: false,
-      subfacultyType: ScheduleType.SUBFACULTY,
+      subFacultyType: ScheduleType.SUBFACULTY,
       loadingElemId: 0,
       alertTitle: ""
     };

@@ -2,14 +2,13 @@
   <table
     class="table table-bordered table-align"
     :class="{ 'table-hover': !disable }"
-    :id="'schedule-' + code"
   >
-    <TableHead :schedule_type="schedule_type"></TableHead>
+    <TableHead :scheduleType="scheduleType"></TableHead>
     <TableDay
       v-for="day in days"
       :key="day.number"
       :day="day"
-      :schedule_type="schedule_type"
+      :scheduleType="scheduleType"
       :disable="disable"
       :currentState="currentState"
     ></TableDay>
@@ -24,7 +23,7 @@ import { CurrentState } from "../../models/entities/CurrentState";
 export default {
   name: "ViewTable",
   components: { TableHead, TableDay },
-  props: ["schedule_type", "code", "currentState", "disable"],
+  props: ["scheduleType", "code", "currentState", "disable"],
   data() {
     return {
       createState: CurrentState.SCHEDULE_CREATE,
@@ -34,12 +33,6 @@ export default {
   computed: {
     days: function() {
       return this.$store.getters["university/days"];
-    },
-    selected_speciality: function() {
-      return this.$store.getters["edit/selected_speciality"];
-    },
-    selected_sub_faculty: function() {
-      return this.$store.getters["edit/selected_sub_faculty"];
     }
   }
 };

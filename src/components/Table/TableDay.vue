@@ -9,7 +9,7 @@
       v-for="row in allRows"
       :key="row.id"
       :row="row"
-      :schedule_type="schedule_type"
+      :scheduleType="scheduleType"
     ></TableRow>
   </tbody>
   <tbody v-else-if="!loadingTable" class="p-0">
@@ -24,7 +24,7 @@
       :key="row.id"
       class="p-0"
       :row="row"
-      :scheduleType="schedule_type"
+      :scheduleType="scheduleType"
       :disable="disable"
       @clicked="changeRowNum"
     >
@@ -40,7 +40,7 @@ import TableRow from "./TableRow";
 export default {
   name: "TableDay",
   components: { TableRow, EditableTableRow },
-  props: ["day", "schedule_type", "disable", "currentState"],
+  props: ["day", "scheduleType", "disable", "currentState"],
   data() {
     return {
       viewState: CurrentState.SCHEDULE_VIEW,
@@ -54,11 +54,6 @@ export default {
     }
   },
   computed: {
-    /* rows:{get:function () {
-
-          },set:function (newRows) {
-
-          }},*/
     loadingTable: function() {
       if (this.currentState == this.editState)
         return this.$store.getters["edit/loadingTable"];

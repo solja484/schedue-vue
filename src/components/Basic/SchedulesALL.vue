@@ -15,7 +15,7 @@
         <b-skeleton class="mx-5  py-2 h-25" v-if="loading"></b-skeleton>
       </div>
       <Title message="Розклади за кафедрами" additional=""></Title>
-      <ScheduleBlock :type="sub_faculty" v-if="!loading"></ScheduleBlock>
+      <ScheduleBlock :type="subFaculty" v-if="!loading"></ScheduleBlock>
       <Title message="Розклади сесії" additional=""></Title>
       <ScheduleBlock :type="session" v-if="!loading"></ScheduleBlock>
     </div>
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       speciality: ScheduleType.SPECIALITY,
-      sub_faculty: ScheduleType.SUBFACULTY,
+      subFaculty: ScheduleType.SUBFACULTY,
       session: ScheduleType.SESSION,
       userRole: this.$store.getters["state/role"],
       methodistRole: Role.METHODIST

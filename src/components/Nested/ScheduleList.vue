@@ -16,7 +16,7 @@ import ScheduleListELem from "../Nested/ScheduleListELem";
 export default {
   name: "ScheduleList",
   components: { ScheduleListELem },
-  props: ["type", "faculty", "sub_faculty", "level", "year"],
+  props: ["type", "faculty", "subFaculty", "level", "year"],
   data() {
     return {
       subFacultyType: ScheduleType.SUBFACULTY
@@ -35,7 +35,7 @@ export default {
           s =>
             s.schedule_type == this.type &&
             s.faculty_id == this.faculty &&
-            this.sub_faculty == s.subfaculty_id
+            this.subFaculty == s.subfaculty_id
         );
       else
         return this.schedules.filter(

@@ -47,7 +47,7 @@
     </div>
     <div class="px-5 mt-3">
       <ViewTable
-        :schedule_type="schedule.schedule_type"
+        :scheduleType="schedule.schedule_type"
         :code="schedule.code"
         :currentState="currentState"
       ></ViewTable>

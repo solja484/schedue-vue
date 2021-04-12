@@ -1,6 +1,6 @@
 <template>
   <table class="table table-bordered table-responsive mb-5">
-    <thead class="table-header">
+    <thead>
       <tr class="text-center table-header">
         <th style="width: 5%;">Час</th>
         <th v-for="day in days" :key="day.number" style="width: 16%;">
@@ -39,4 +39,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+  @import "../../assets/scss/_variables.scss";
+
+  .table-header th {
+    border-color: $gray-border;
+    background: $gray-fill;
+  }
+</style>

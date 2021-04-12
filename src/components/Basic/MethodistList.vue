@@ -27,9 +27,6 @@ export default {
   components: { MethodistListElem, BIconPlus },
   data() {
     return {
-      speciality: ScheduleType.SPECIALITY,
-      sub_faculty: ScheduleType.SUBFACULTY,
-      session: ScheduleType.SESSION,
       methodist: this.$store.getters["state/user"].methodist,
       scheduleBlocks: [
         { title: "Розклади за спеціальністю", type: ScheduleType.SPECIALITY },
@@ -58,7 +55,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("list/fetchMethodistSchedules");
-    console.log(localStorage);
   }
 };
 </script>

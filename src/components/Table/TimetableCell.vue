@@ -9,16 +9,16 @@
       <span v-if="info.group == 0" class="badge badge-info mx-1 p-1"
         >Лекція</span
       >
-      <span v-else class="badge practice mx-1 p-1">{{ info.group }} група</span>
+      <span v-else class="badge practise mx-1 p-1">{{ info.group }} група</span>
     </p>
     <p v-else>
       <span class="float-right">{{ info.weeks }}</span>
       <span class="badge badge-secondary p-1">{{ info.course_cdoc }}</span>
       <br />
-      <span class="badge practice mr-1 p-1" v-if="info.group"
+      <span class="badge practise mr-1 p-1" v-if="info.group"
         >{{ info.group }} група</span
       >
-      <span v-else class="badge practice mr-1 p-1">Всі групи</span>
+      <span v-else class="badge practise mr-1 p-1">Всі групи</span>
     </p>
     <a
       class="p-0 m-0 black-link"
@@ -47,7 +47,7 @@ export default {
 .cursor {
   cursor: default;
 }
-.practice {
+.practise {
   color: white;
   background: $success;
 }
